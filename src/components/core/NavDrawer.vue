@@ -14,7 +14,13 @@
 
             <v-list-item-content v-if="auth">
               <v-list-item-title class="text-color">
+                <v-btn
+                class="pa-0 text-lowercase"
+                color="accent"
+               @click="doAction('route', 'Profile')" text
+                >
                 {{userProfile.displayName ? '@' + userProfile.displayName : userProfile.lastname}}
+                </v-btn>
               </v-list-item-title>
             </v-list-item-content>
             <v-list-item-content v-else>
@@ -54,6 +60,7 @@
         </v-list-item>
 
         <v-list-item link v-if="auth"
+        @click="doAction('route', 'CodeRoom')"
         >
           <v-list-item-action>
             <v-icon color="primary">mdi-group</v-icon>
@@ -130,7 +137,15 @@ export default {
 
     doAction(action, word) {
       if (action === 'route') {
-        this.$router.push({ name: word });
+        if (word === 'Profile') {
+          if (this.$route.name === 'Profile') {
+            this.$store.commit('CLICKED_USER_DETAILS', this.userProfile);
+          } else {
+            this.$router.push({ name: word, params: { id: this.userProfile.userId } });
+          }
+        } else {
+          this.$router.push({ name: word });
+        }
       }
 
       if (action === 'dispatch') {

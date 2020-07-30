@@ -4,6 +4,9 @@
     v-if="!showPasswordReset"
     class="text-center"
     >
+    <v-col cols="12">
+      <h3 class="display-2 text-color">Log In</h3>
+    </v-col>
       <v-col
         cols="12"
       >

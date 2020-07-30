@@ -7,12 +7,16 @@
     >
       <v-app-bar-nav-icon
       v-if="!currentRoute"
-       class="hidden-lg-and-up"
+       class="hidden-lg-and-up text-color"
        @click="drawerToggle"></v-app-bar-nav-icon>
        <v-avatar>
          <v-img src="../../assets/logo2.png"></v-img>
        </v-avatar>
-      <span class="text-color title ml-3 mr-5 font-weight-light">Punter Masters</span>
+      <span class="text-color title ml-3 mr-5 font-weight-light"
+      style="cursor: pointer;"
+      @click="goHome"
+      >Punter Masters
+      </span>
       <v-text-field
       v-if="auth"
         class="hidden-sm-and-down"
@@ -101,6 +105,17 @@ export default {
     dialogToggle() {
       this.$store.commit('TOGGLE_SHARE_DIALOG');
     },
+
+    goHome() {
+      if (this.$route.name !== 'Home') {
+        this.$router.push({ name: 'Home' });
+      }
+    },
   },
 };
 </script>
+<style scoped>
+.clickable {
+  cursor: pointer;
+}
+</style>

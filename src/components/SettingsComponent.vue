@@ -1,8 +1,9 @@
 <template>
   <div class="divBorder">
+    <base-back  v-if="userProfile" />
     <base-reset />
       <v-card
-    style="width: 80vw;"
+    style="width: 95vw;"
     class="mx-auto"
     color="transparent"
     outlined
@@ -11,11 +12,11 @@
         <v-card-title class="primary--text text-center">User Settings</v-card-title>
       <v-container fluid>
           <v-row>
-              <v-col cols="6">
+              <v-col cols="12">
                   <v-row>
                     <v-col cols='12' class="">
                       <v-card
-                        style="width: 80vw;"
+                        style="width: 95vw;"
                         class=""
                         color="transparent"
                         flat

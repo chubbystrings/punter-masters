@@ -110,15 +110,15 @@ export default {
 <style>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
 #keep .v-navigation-drawer__border {
-  background-color: #e99fb8;;
+  background-color: #a38d65;
   /* display: none; */
 }
 .theme--light.v-divider {
-    border-color: #eec1d0 !important;
+    border-color: #a38d65 !important;
 }
 
 .divBorder {
-  border: 1px solid #e99fb8;
+  border: 1px solid #a38d65;
 }
 
 .backGcolor {
@@ -126,5 +126,11 @@ export default {
 }
 .text-color{
   color: #a38d65 !important;
+}
+.pagination--view {
+  position: absolute;
+  bottom: 0.4rem;
+  left: 0;
+  right: 0;
 }
 </style>

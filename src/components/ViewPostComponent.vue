@@ -1,12 +1,13 @@
 <template>
-<div class="divBorder">
+<div class="">
+  <base-back  v-if="post" />
   <transition
   mode="out-in"
     enter-active-class="animated fadeIn"
     leave-active-class="animated fadeOut"
   >
     <v-card
-    style="width: 80vw;"
+    style="width: 95vw;"
     class="mx-auto"
     color="transparent"
     outlined
@@ -30,27 +31,7 @@
       {{post.content}}
     </v-card-text>
      <v-card-actions>
-      <v-badge
-      class="mr-4"
-      color="primary"
-      :content="post.comments ? `${post.comments}` : '0'"
-      >
-        <v-icon>mdi-comment</v-icon>
-      </v-badge>
-
-       <v-btn icon class="mr-4">
-          <v-badge
-          color="primary"
-          :content="post.likes ? `${post.likes}` : '0'"
-        >
-          <v-icon
-          @click="likePost"
-          :color="userLiked ? 'primary' : ''"
-          >mdi-heart</v-icon>
-        </v-badge>
-      </v-btn>
-
-      <v-btn @click="commentOpen = !commentOpen"
+       <v-btn @click="commentOpen = !commentOpen"
       text
       class=" primary--text"
       color="grey"
@@ -58,21 +39,42 @@
         reply
       </v-btn>
 
+      <v-badge
+      class="mr-4"
+      color="accent"
+      :content="post.comments ? `${post.comments}` : '0'"
+      >
+        <v-icon color="primary">mdi-comment-outline</v-icon>
+      </v-badge>
+
+       <v-btn icon class="mr-4">
+          <v-badge
+          color="accent"
+          :content="post.likes ? `${post.likes}` : '0'"
+        >
+          <v-icon
+          @click="likePost"
+          :color="userLiked ? 'primary' : ''"
+          >{{ userLiked ? 'mdi-heart' : 'mdi-heart-outline'}}</v-icon>
+        </v-badge>
+      </v-btn>
+
       <v-btn
       v-if="post.userId === userProfile.userId"
       text
       color="primary"
       class="caption"
+      icon
       @click="openEdit(post.title, post.content)"
       >
-        Edit
+      <v-icon color="primary">mdi-file-edit-outline</v-icon>
       </v-btn>
-      <v-btn text color="primary"
+      <v-btn icon text color="primary"
       @click="confirmDeletePost()"
       class="caption"
       v-if="post.userId === userProfile.userId"
       >
-        delete
+      <v-icon color="primary">mdi-delete-outline</v-icon>
       </v-btn>
      </v-card-actions>
       <v-col cols="12">
@@ -203,8 +205,8 @@ export default {
       } else {
         this.userLiked = false;
       }
-      this.$store.commit('LOAD_COMMENTS', commentsArray);
       this.$store.commit('OVERLAY_OFF');
+      this.$store.commit('LOAD_COMMENTS', commentsArray);
       this.loading = '';
     } catch (error) {
       console.log(error);
@@ -234,6 +236,7 @@ export default {
           postId: this.$route.params.id,
           userId: auth.currentUser.uid,
           name: `${this.$store.state.userProfile.firstname} ${this.$store.state.userProfile.lastname} `,
+          likes: 0,
         };
         await commentsCollection.add(dataForComment);
         await postsCollection.doc(this.$route.params.id).update({

@@ -65,6 +65,30 @@ const routes = [
       requiresAuth: true,
     },
   },
+  {
+    path: '/code-room',
+    name: 'CodeRoom',
+    component: () => import('../views/CodeRoom.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/profile/:id',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+    async beforeEnter(to, from, next) {
+      console.log(to.params);
+      if (!to.params.id) {
+        return;
+      }
+
+      next();
+    },
+  },
 ];
 
 const router = new VueRouter({

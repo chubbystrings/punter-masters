@@ -1,5 +1,7 @@
 <template>
+<div>
   <v-card
+  v-if="ready"
     max-width="800"
     class="mx-auto"
     flat
@@ -52,6 +54,16 @@
       </v-timeline-item>
     </v-timeline>
   </v-card>
+  <div class="text-center" v-if="!ready">
+    <h2 class="display-2 text-center" v-if="loadNow">STILL IN PROGRESS</h2>
+    <img
+    style="height: 7rem; width: 7rem"
+      @load="onload"
+       alt="punter masters logo"
+        src="../assets/logo2.png"
+      >
+  </div>
+  </div>
 </template>
 <script>
 import { mapState } from 'vuex';
@@ -63,6 +75,8 @@ export default {
     dialog: false,
     chats: [],
     bant: '',
+    ready: false,
+    loadNow: false,
   }),
 
   computed: {
@@ -84,6 +98,9 @@ export default {
     },
     closeBanterRoom() {
       this.$store.commit('TOGGLE_BANTER_ROOM');
+    },
+    onload() {
+      this.loadNow = true;
     },
   },
 

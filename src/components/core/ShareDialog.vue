@@ -23,7 +23,12 @@
           <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="primary" text @click="toggleDialog">Cancel</v-btn>
-          <v-btn color="primary" text @click="shareBetCode">Ok</v-btn>
+          <v-btn color="primary"
+          :disabled="!betCode || !betForum"
+           text @click="shareBetCode"
+           >
+           Ok
+           </v-btn>
         </v-card-actions>
       </v-card>
 

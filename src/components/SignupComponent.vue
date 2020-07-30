@@ -4,6 +4,9 @@
     <v-row
     class="text-center"
     >
+    <v-col cols="12">
+      <h3 class="display-2 text-color">Sign Up</h3>
+    </v-col>
     <v-col
       cols="12"
       >

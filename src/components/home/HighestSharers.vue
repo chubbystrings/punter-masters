@@ -9,7 +9,7 @@
     :loading="loading"
   >
     <v-list subheader three-line>
-      <v-subheader>Top Code Sharers</v-subheader>
+      <v-subheader class="accent">Top Code Sharers</v-subheader>
 
       <v-list-item
         v-for="item in users"
@@ -19,9 +19,13 @@
           <v-img :src="item.avatar"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-content>
-              <v-list-item-title>
-              {{ item.name}}
+        <v-list-item-content >
+              <v-list-item-title class="pa-0">
+              <v-btn
+              class="pa-0 text-lowercase"
+               @click="toProfile(item.id)" text>
+               {{ item.displayName ? '@' + item.displayName : item.name }}
+               </v-btn>
             </v-list-item-title>
           <v-list-item-subtitle >
               has shared {{ item.codeShared}} times
@@ -67,6 +71,7 @@ export default {
         this.users.push({
           name: `${doc.data().firstname} ${doc.data().lastname}`,
           codeShared: doc.data().codeShared,
+          displayName: doc.data().displayName,
           id: doc.id,
           avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
         });
@@ -90,10 +95,16 @@ export default {
       console.log(error);
     }
   },
+
+  methods: {
+    toProfile(id) {
+      this.$router.push({ name: 'Profile', params: { id } });
+    },
+  },
 };
 </script>
 <style scoped>
 .v-card {
-    border: 1px solid #e99fb8;;
+    border: 1px solid #a38d65;
 }
 </style>

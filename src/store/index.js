@@ -1,21 +1,37 @@
 /* eslint-disable no-use-before-define */
 import Vue from 'vue';
 import Vuex from 'vuex';
+// import moment from 'moment';
 import * as fb from '../firebase';
 import router from '../router/index';
 
 Vue.use(Vuex);
 
+const HOUR = 1000 * 60 * 60;
+const anHourAgo = new Date() - HOUR;
+
+// LISTEN TO CHANGES TO NOTIFICATION TABLE
 fb.notificationCollection.orderBy('createdOn', 'asc').onSnapshot((snapshot) => {
   snapshot.docChanges().forEach((change) => {
     // eslint-disable-next-line no-use-before-define
-    if (store.state.notifications.notification === true) {
-      store.commit('REMOVE_NOTIFICATION');
+    if (change.doc.data().createdOn.toDate() >= anHourAgo) {
+      if (store.state.notifications.notification === true) {
+        store.commit('REMOVE_NOTIFICATION');
+        store.commit('SHOW_NOTIFICATION', change.doc.data());
+      }
       store.commit('SHOW_NOTIFICATION', change.doc.data());
     }
-    store.commit('SHOW_NOTIFICATION', change.doc.data());
   });
 });
+
+// const hour = new Date() - (2000 * 60 * 60);
+
+// const moreThanAnHourAgo = (date) => {
+//   const HOUR = 1000 * 60 * 60;
+//   const anHourAgo = new Date() - HOUR;
+
+//   return date < anHourAgo;
+// };
 
 const alert = (type, message) => {
   const msg = {
@@ -31,12 +47,15 @@ const store = new Vuex.Store({
   state: {
     drawer: false,
     userProfile: {},
+    userDetails: {},
     openRightDrawer: false,
     shareDialog: false,
     postDialog: false,
     resetDialog: false,
     editDialog: false,
     banterRoom: false,
+    profileComponentKey: 0,
+    sharedCodes: [],
     notifications: {
       notification: false,
     },
@@ -69,11 +88,17 @@ const store = new Vuex.Store({
       state.commentsData = [];
     },
 
+    /** **************** APPLICATION MUTATIONS *********** */
     SHOW_NOTIFICATION(state, data) {
       state.notifications.notification = true;
       state.notifications.name = data.sharerName;
       state.notifications.forum = data.forum;
       state.notifications.code = data.code;
+      state.notifications.userId = data.userId;
+    },
+
+    SET_CODE_SHARED(state, val) {
+      state.sharedCodes = val;
     },
 
     REMOVE_NOTIFICATION(state) {
@@ -141,6 +166,29 @@ const store = new Vuex.Store({
       state.actionDialog.action = true;
     },
 
+    OVERLAY_ON(state) {
+      state.overlay = true;
+    },
+
+    OVERLAY_OFF(state) {
+      state.overlay = false;
+    },
+
+    SET_ALERT(state, payload) {
+      state.alerts.alert = true;
+      state.alerts.type = payload.type;
+      state.alerts.message = payload.message;
+      setTimeout(() => {
+        state.alerts.alert = false;
+      }, 4000);
+    },
+
+    UPDATE_COMPONENT_KEY(state) {
+      state.profileComponentKey += 1;
+    },
+
+    /** ********************** USER MUTATIONS ***************************** */
+
     OPEN_RESET_PASS(state) {
       state.resetDialog = true;
     },
@@ -153,6 +201,12 @@ const store = new Vuex.Store({
       state.userProfile = val;
       console.log(state.userProfile);
     },
+
+    CLICKED_USER_DETAILS(state, val) {
+      state.userDetails = val;
+    },
+
+    /** ************** POSTS MUTATIONS ****************** */
 
     LOAD_POSTS(state, val) {
       state.posts = val;
@@ -178,7 +232,7 @@ const store = new Vuex.Store({
     },
 
     LOAD_COMMENTS(state, arr) {
-      this.state.commentsData = arr;
+      state.commentsData = arr;
     },
 
     INCREMENT_COMMENTS(state) {
@@ -196,24 +250,12 @@ const store = new Vuex.Store({
     ADD_POST(state, val) {
       state.posts.unshift(val);
     },
-    OVERLAY_ON(state) {
-      state.overlay = true;
-    },
-
-    OVERLAY_OFF(state) {
-      state.overlay = false;
-    },
-
-    SET_ALERT(state, payload) {
-      state.alerts.alert = true;
-      state.alerts.type = payload.type;
-      state.alerts.message = payload.message;
-      setTimeout(() => {
-        state.alerts.alert = false;
-      }, 4000);
-    },
   },
   actions: {
+
+    /** USER AND USER AUTH ACTIONS ************************************************* */
+
+    // SIGN UP
     // eslint-disable-next-line no-unused-vars
     async signup({ commit, dispatch }, form) {
       commit('OVERLAY_ON');
@@ -223,6 +265,7 @@ const store = new Vuex.Store({
         await fb.usersCollection.doc(user.uid).set({
           firstname: form.firstname,
           lastname: form.lastname,
+          codeShared: 0,
         });
         await user.sendEmailVerification();
         await fb.auth.signOut();
@@ -235,6 +278,8 @@ const store = new Vuex.Store({
         commit('SET_ALERT', alert('error', error.message));
       }
     },
+
+    // LOG IN
     // eslint-disable-next-line no-unused-vars
     async login({ commit, dispatch, state }, form) {
       commit('OVERLAY_ON');
@@ -273,6 +318,7 @@ const store = new Vuex.Store({
       }
     },
 
+    // FETCH AND COMMIT USER DATA
     async fetchUserProfile({ commit }, user) {
       // fetch user profile
       const userProfile = await fb.usersCollection.doc(user.uid).get();
@@ -290,6 +336,70 @@ const store = new Vuex.Store({
       }
     },
 
+    // get a specific details for profile view
+    async getUser({ commit }, id) {
+      commit('OVERLAY_ON');
+      try {
+        const user = await fb.usersCollection.doc(id).get();
+        if (user.exists) {
+          console.log(user);
+          commit('CLICKED_USER_DETAILS', user.data());
+        }
+        commit('OVERLAY_OFF');
+      } catch (error) {
+        console.log(error);
+        commit('OVERLAY_OFF');
+      }
+    },
+
+    // USER CAN UPDATE OR SET USERNAME
+    async changeUsername({ commit, dispatch }, username) {
+      commit('OVERLAY_ON');
+
+      try {
+        const user = fb.auth.currentUser;
+        await user.updateProfile({
+          displayName: username,
+        });
+
+        const userProfile = fb.usersCollection.doc(user.uid);
+        await userProfile.update({
+          displayName: username,
+        });
+
+        dispatch('fetchUserProfile', user);
+        commit('OVERLAY_OFF');
+        commit('SET_ALERT', alert('success', 'Username updated successfully'));
+      } catch (error) {
+        commit('OVERLAY_OFF');
+        commit('SET_ALERT', alert('error', error.message));
+      }
+    },
+
+    // USER CAN RESET PASSWORD
+    async resetPassword({ commit }, email) {
+      commit('OVERLAY_ON');
+      try {
+        await fb.auth.sendPasswordResetEmail(email);
+        commit('SET_ALERT', {
+          alert: true,
+          type: 'success',
+          message: 'password reset sent to your email',
+        });
+        commit('OVERLAY_OFF');
+        commit('CLOSE_RESET_PASS');
+      } catch (err) {
+        commit('OVERLAY_OFF');
+        commit('CLOSE_RESET_PASS');
+        commit('SET_ALERT', {
+          alert: true,
+          type: 'error',
+          message: err.message,
+        });
+      }
+    },
+
+    // LOGOUT ACTION
     async logout({ commit }) {
       commit('OVERLAY_ON');
       await fb.auth.signOut();
@@ -301,6 +411,8 @@ const store = new Vuex.Store({
       commit('CLEAR_ALL_DATA');
       commit('SET_ALERT', alert('success', 'logged out successfully'));
     },
+
+    /* **************** POSTS AND POSTS ACTIONS ************************************************* */
 
     // eslint-disable-next-line no-unused-vars
     async createPost({ commit, state }, post) {
@@ -328,6 +440,8 @@ const store = new Vuex.Store({
         commit('SET_ALERT', alert('error', error.message));
       }
     },
+
+    // GET/LOAD ALL POSTS IN A FORUM
     async loadPosts({ commit }, forum) {
       commit('OVERLAY_ON');
       try {
@@ -348,6 +462,8 @@ const store = new Vuex.Store({
         commit('SET_ALERT', alert('error', error.message));
       }
     },
+
+    // GET/VIEW A SINGLE POST IN A FORUM
     async getPost({ commit }, id) {
       commit('OVERLAY_ON');
       try {
@@ -368,6 +484,8 @@ const store = new Vuex.Store({
         commit('SET_ALERT', alert('error', error.message));
       }
     },
+
+    // LIKE A POST
     async likePost({ commit }, postData) {
       commit('INCREMENT_LIKES');
       try {
@@ -393,6 +511,7 @@ const store = new Vuex.Store({
       }
     },
 
+    // UNLIKE A POST
     async unLikePost({ commit }, postData) {
       commit('DECREMENT_LIKES');
       try {
@@ -413,6 +532,7 @@ const store = new Vuex.Store({
       }
     },
 
+    // EDIT A PARTICULAR POST **only posted by user
     async editPost({ commit }, editData) {
       const {
         postId, userId, title, content,
@@ -445,6 +565,7 @@ const store = new Vuex.Store({
       }
     },
 
+    // DELETE A PARTICULAR POST **only posted by user
     async deletePost({ commit }, postData) {
       const { postId, forumId, forum } = postData;
       const id = postId;
@@ -473,51 +594,7 @@ const store = new Vuex.Store({
       }
     },
 
-    async changeUsername({ commit, dispatch }, username) {
-      commit('OVERLAY_ON');
-
-      try {
-        const user = fb.auth.currentUser;
-        await user.updateProfile({
-          displayName: username,
-        });
-
-        const userProfile = fb.usersCollection.doc(user.uid);
-        await userProfile.update({
-          displayName: username,
-        });
-
-        dispatch('fetchUserProfile', user);
-        commit('OVERLAY_OFF');
-        commit('SET_ALERT', alert('success', 'Username updated successfully'));
-      } catch (error) {
-        commit('OVERLAY_OFF');
-        commit('SET_ALERT', alert('error', error.message));
-      }
-    },
-
-    async resetPassword({ commit }, email) {
-      commit('OVERLAY_ON');
-      try {
-        await fb.auth.sendPasswordResetEmail(email);
-        commit('SET_ALERT', {
-          alert: true,
-          type: 'success',
-          message: 'password reset sent to your email',
-        });
-        commit('OVERLAY_OFF');
-        commit('CLOSE_RESET_PASS');
-      } catch (err) {
-        commit('OVERLAY_OFF');
-        commit('CLOSE_RESET_PASS');
-        commit('SET_ALERT', {
-          alert: true,
-          type: 'error',
-          message: err.message,
-        });
-      }
-    },
-
+    // SHARE BETCODE ACTIONS
     async shareBetCode({ commit, state }, payload) {
       commit('OVERLAY_ON');
       console.log(payload);
@@ -531,6 +608,10 @@ const store = new Vuex.Store({
           sharerName: `${state.userProfile.firstname} ${state.userProfile.lastname}`,
           forum: payload.name,
           forumId: payload.id,
+          ratings: 0,
+          userRated: 0,
+          thumbsUp: 0,
+          thumbsDown: 0,
           createdOn: new Date(),
         });
 
@@ -550,12 +631,16 @@ const store = new Vuex.Store({
         });
         commit('OVERLAY_OFF');
         commit('SET_ALERT', alert('success', 'posted successfully'));
+        if (router.currentRoute.name !== 'CodeRoom') {
+          router.push({ name: 'CodeRoom' });
+        }
       } catch (error) {
         commit('OVERLAY_OFF');
         commit('SET_ALERT', alert('error', error.message));
       }
     },
 
+    // SHOW WHO SHARED A CODE INSTANT NOTIFICATION
     showNotification({ commit }) {
       fb.notificationCollection.onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {

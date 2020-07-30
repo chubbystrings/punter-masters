@@ -1,7 +1,8 @@
 <template>
 <div class="divBorder">
+  <base-back  v-if="posts" />
     <v-card
-    style="width: 80vw"
+    style="width: 95vw"
     class="mx-auto"
     color="transparent"
     flat
@@ -16,7 +17,7 @@
         text @click.stop="togglePost">Write post in {{currentRoute}} room
         <v-icon>mdi-pencil</v-icon>
         </v-btn>
-        <span v-if="posts">({{ posts.length }} posts)</span>
+        <span v-if="posts" class="text-color">({{ posts.length }} posts)</span>
       </div>
       <post />
     </v-col>

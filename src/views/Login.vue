@@ -6,7 +6,6 @@
        alt="punter masters logo"
         src="../assets/logo2.png"
       >
-      <h3 class="display-2 text-color">Sign Up</h3>
     <login />
   </div>
 </template>

@@ -13,12 +13,14 @@
         v-for="(comment, i) in paginatedComments"
         :key="comment.comment"
         :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
-        class=""
+        class="pa-0 mt-2 mb-2"
+        small
+        fill-dot
       >
 
-        <v-card class="mr-3"
+        <v-card class="mx-n5"
         rounded
-        max-height="200"
+        max-height="220"
          flat
          :key="i"
          color="secondary"
@@ -26,7 +28,7 @@
          >
           <v-card-title class="pa-0 pl-2">
             {{comment.name | lowerCase }}
-            <small class="caption"  style="color: blue; margin-left: 0.5rem;">
+            <small class="caption pl-1 text-color" >
               commented {{ comment.createdOn | formatDate}}
             </small>
             </v-card-title>
@@ -35,14 +37,24 @@
           </v-card-text>
           <v-card-actions class="pa-0 pr-2">
             <v-spacer></v-spacer>
-             <v-btn icon right class="pa-0">
+             <v-btn
+              icon
+              right
+              class="pa-0"
+               @click.prevent="commentLike(i, comment.id, comment.postId,
+                comment.likes, comment.name)"
+              >
                 <v-badge
-                color="primary"
-                content="0"
+                color="accent"
+                :content="comment.likes ? comment.likes : '0'"
                 inline
                 class="mr-2"
                 >
-                <v-icon>
+                <v-icon
+                :color="userLikedComments.filter((i) =>
+                 i.commentId === comment.id && i.userId === ID).length > 0 ?
+                 'primary' : ''"
+                >
                   mdi-heart
                 </v-icon>
               </v-badge>
@@ -57,6 +69,7 @@
       v-model="page"
       :length="pages"
       circle
+      :disabled="paginatedComments.length <= 4"
     ></v-pagination>
     </transition-group>
   </div>
@@ -65,6 +78,7 @@
 // eslint-disable-next-line no-unused-vars
 import moment from 'moment';
 import { mapState } from 'vuex';
+import { commentLikesCollection, auth, commentsCollection } from '../../firebase';
 
 export default {
   data: () => ({
@@ -72,10 +86,21 @@ export default {
     fullPost: {},
     postComments: [],
     page: 1,
+    userLikedComments: [],
   }),
 
   computed: {
-    ...mapState(['comments', 'commentsData']),
+    ...mapState(['comments', 'commentsData', 'userProfile']),
+
+    ID() {
+      return auth.currentUser.uid;
+    },
+
+    liked() {
+      const like = this.userLikedComments.filter((i) => i.userId === this.ID);
+      console.log(like);
+      return like[0] !== undefined;
+    },
 
     pages() {
       return (
@@ -93,7 +118,6 @@ export default {
 
   filters: {
     formatDate(val) {
-      console.log(val);
       if (!val) { return '-'; }
       if (val.seconds) {
         return moment(Date.parse(val.toDate())).fromNow();
@@ -109,14 +133,97 @@ export default {
       return val.toLowerCase();
     },
   },
-  beforeUpdate() {
-    this.$store.commit('OVERLAY_ON');
+
+  methods: {
+    // eslint-disable-next-line no-unused-vars
+    async commentLike(index, commentId, postId, likes, name) {
+      // eslint-disable-next-line max-len
+      const likedComment = this.userLikedComments.filter((i) => i.userId === this.ID && i.commentId === commentId);
+      console.log(likedComment);
+      if (likedComment.length === 0) {
+        this.paginatedComments[index].likes += 1;
+        try {
+          const userId = auth.currentUser.uid;
+          const docId = `${userId}_${commentId}`;
+
+          // check if user has liked comment
+          const doc = await commentLikesCollection.doc(docId).get();
+          if (doc.exists) { return; }
+          // create comment likes
+          await commentLikesCollection.doc(docId).set({
+            postId,
+            userId,
+            commentId,
+          });
+          this.userLikedComments.push({
+            id: docId,
+            postId,
+            userId,
+            commentId,
+          });
+          // update post likes count
+          await commentsCollection.doc(commentId).update({
+            likes: likes + 1,
+          });
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'success',
+            message: ` you liked ${name}'s comment`,
+          });
+        } catch (error) {
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'error',
+            message: error.message,
+          });
+        }
+      }
+      if (likedComment.length === 1) {
+        this.paginatedComments[index].likes -= 1;
+        try {
+          const userId = auth.currentUser.uid;
+          const docId = `${userId}_${commentId}`;
+
+          // check if user has liked comment
+          const doc = await commentLikesCollection.doc(docId).get();
+          if (doc.exists) {
+            // create comment likes
+            await commentLikesCollection.doc(docId).delete();
+            this.userLikedComments.splice(this.userLikedComments.indexOf(likedComment[0]), 1);
+            // update post likes count
+            await commentsCollection.doc(commentId).update({
+              likes: likes - 1,
+            });
+
+            this.$store.commit('SET_ALERT', {
+              alert: true,
+              type: 'success',
+              message: ` you un-liked ${name}'s comment`,
+            });
+          }
+        } catch (error) {
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'error',
+            message: error.message,
+          });
+        }
+      }
+    },
   },
 
-  updated() {
-    setTimeout(() => {
-      this.$store.commit('OVERLAY_OFF');
-    }, 1000);
+  async created() {
+    console.log(this.userProfile.userId);
+    const docRef = await commentLikesCollection.where('userId', '==', auth.currentUser.uid).get();
+    if (!docRef.empty) {
+      console.log('not empty');
+      docRef.forEach((doc) => {
+        this.userLikedComments.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+    }
   },
 };
 </script>

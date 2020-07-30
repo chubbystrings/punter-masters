@@ -45,6 +45,7 @@
       v-model="page"
       :length="pages"
       circle
+      :disabled="posts.length <= 1"
     ></v-pagination>
   </div>
 </div>

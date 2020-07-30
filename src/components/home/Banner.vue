@@ -10,15 +10,16 @@
       v-for="(slide, i) in slides"
       :key="i"
       src="../../assets/umbrella.jpg"
+      class=""
     >
         <v-row
           class="fill-height"
           align="center"
           justify="center"
         >
-          <div class="display-2 primary--text">{{ slide.name }}</div>
+          <div class="primary--text display-1 pl-3">{{ slide.name }}</div>
           <v-btn
-          class="ml-3 text-color"
+          class="ml-3 text-color hidden-sm-and-down"
           small
           color="primary"
           @click="doAction(slide.type, slide.link)"
@@ -46,7 +47,7 @@ export default {
           name: 'SHARE CODE', link: 'TOGGLE_SHARE_DIALOG', type: 'commit', message: 'Share Code',
         },
         {
-          name: 'LOVE BANTER ??', link: 'Banter', type: 'link', message: 'Banter Room',
+          name: 'LOVE BANTER?', link: 'Banter', type: 'link', message: 'Banter Room',
         },
         { name: 'TALK TO OTHER MASTERS' },
         { name: 'MORE FORUMS' },
