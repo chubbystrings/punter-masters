@@ -11,7 +11,7 @@
           @click="openPost(item.id, item.forum)"
         >
           <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
+            <v-img :src="item.userAvatar"></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content>

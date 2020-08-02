@@ -73,7 +73,7 @@ export default {
           codeShared: doc.data().codeShared,
           displayName: doc.data().displayName,
           id: doc.id,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
+          avatar: doc.data().photoURL,
         });
       });
 

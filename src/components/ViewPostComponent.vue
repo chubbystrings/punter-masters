@@ -16,7 +16,9 @@
     :loading="loading"
     >
        <v-list-item v-if="post.title">
-        <v-list-item-avatar color="primary"></v-list-item-avatar>
+        <v-list-item-avatar>
+          <v-img :src="post.userAvatar"></v-img>
+        </v-list-item-avatar>
         <v-list-item-content>
         <v-list-item-title
         class="headline">

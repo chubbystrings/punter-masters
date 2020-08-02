@@ -19,7 +19,9 @@
           :key="item.id"
         >
           <v-list-item-avatar>
-            <v-img :src="item.avatar"></v-img>
+            <v-img
+            @click="openProfile(item.userId)"
+             class="hoverImg" :src="item.userAvatar"></v-img>
           </v-list-item-avatar>
 
           <v-list-item-content>
@@ -58,7 +60,6 @@ export default {
         this.codes.push({
           ...doc.data(),
           id: doc.id,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
         });
       });
       this.loading = false;
@@ -72,10 +73,18 @@ export default {
       console.log(error);
     }
   },
+  methods: {
+    openProfile(id) {
+      this.$router.push({ name: 'Profile', params: { id } });
+    },
+  },
 };
 </script>
 <style scoped>
 .v-card {
   border: 1px solid #a38d65;
+}
+.hoverImg:hover {
+  cursor: pointer;
 }
 </style>

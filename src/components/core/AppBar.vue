@@ -30,38 +30,48 @@
       ></v-text-field>
 
       <v-spacer></v-spacer>
-      <v-btn
-      v-if="!auth"
-      to="/login"
-      class="text-color hidden-sm-and-down"
-      text
-      >
-        Login
-      </v-btn>
-       <v-btn
-       v-else
-      @click="logout"
-      class="text-color hidden-sm-and-down"
-      text
-      >
-        Logout
-      </v-btn>
-      <v-btn
+      <span v-if="auth" class="pa-1 text-color">Sub: &#x20A6; 0.00</span>
+       <v-avatar
        v-if="auth"
-      @click="dialogToggle"
-      class="text-color hidden-sm-and-down"
-      text
+       size="30"
+       >
+        <img
+          :src="userProfile.photoURL"
+          alt="Menu"
+        >
+      </v-avatar>
+       <v-menu
+          rounded
+          bottom
+          origin="center center"
+          transition="scale-transition"
+          v-if="auth"
+        >
+      <template v-slot:activator="{ attrs, on }">
+        <v-btn
+        icon
+          class="white--text"
+          v-bind="attrs"
+          v-on="on"
+          small
+        >
+         <v-icon color="accent">mdi-arrow-down-drop-circle-outline</v-icon>
+        </v-btn>
+      </template>
+
+      <v-list
       >
-        share Betcode
-      </v-btn>
-      <v-btn
-      v-if="!auth"
-      class="text-color hidden-sm-and-down"
-      to="/signup"
-      text
-      >
-        Signup
-      </v-btn>
+        <v-list-item
+        v-for="(item, i) in links"
+        :key="i"
+          link
+          @click="doAction(item.name)"
+        >
+        <v-icon>{{item.icon}}</v-icon>
+          <v-list-item-title>{{item.name}}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
       <v-app-bar-nav-icon
       class="text-color hidden-lg-and-up"
       v-if="auth"
@@ -75,6 +85,11 @@ export default {
 
   data: () => ({
     dialog: false,
+    links: [
+      { name: 'Share Code', icon: 'mdi-share' },
+      { name: 'Deposit', icon: 'mdi-cash-plus' },
+      { name: 'Settings', icon: 'mdi-account-settings-outline' },
+      { name: 'Logout', icon: 'mdi-logout' }],
   }),
 
   computed: {
@@ -109,6 +124,22 @@ export default {
     goHome() {
       if (this.$route.name !== 'Home') {
         this.$router.push({ name: 'Home' });
+      }
+    },
+    doAction(name) {
+      if (name === 'Share Code') {
+        this.dialogToggle();
+      }
+
+      if (name === 'Logout') {
+        this.logout();
+      }
+
+      if (name === 'Settings') {
+        if (this.$route.name === 'Settings') {
+          return;
+        }
+        this.$router.push({ name: 'Settings' });
       }
     },
   },

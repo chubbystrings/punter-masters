@@ -1,42 +1,115 @@
 <template>
   <div class="">
-    <base-back  v-if="userDetails.firstname" />
+     <template>
+       <v-avatar
+        style="
+        position: absolute;
+        top: 12rem;
+        left: 1.5rem;
+        z-index: 1;
+        "
+        size="62"
+        >
+          <v-img :src="userDetails.photoURL"></v-img>
+      </v-avatar>
       <v-card
-        style="width: 80vw;"
         class="mx-auto"
-        color="transparent"
-        outlined
+      style="width: 95vw;"
+      flat
+      >
+      <v-card
+        dark
         flat
-        v-if="userDetails.firstname"
-        :key="profileComponentKey"
-    >
-    <v-card-title class="primary--text text-center">User Profile</v-card-title>
-      <v-container fluid>
-          <v-row class="">
-              <v-col cols="4" class="">
-                  <v-img
-                   aspect-ratio="1.7" src="https://picsum.photos/510/300?random" >
-                   </v-img>
-              </v-col>
-              <v-col cols="8" class="">
-                <span class="font-weight-bold">
-                  <span class="text-color" > name: </span>
-                   {{ userDetails.firstname}} {{ userDetails.lastname}}
-                </span><br>
-                <span class="font-weight-bold">
-                  <span class="text-color"> username: </span>
-                  {{ userDetails.displayName ? '@'+ userDetails.displayName : 'None'}}
-                </span><br>
-                 <span class="font-weight-bold">
-                  <span class="text-color"> codeshared: </span> {{ userDetails.codeShared}}
-                </span><br>
-                <span class="font-weight-bold">
-                  <span class="text-color"> ratings: </span> 3.5
-                </span>
-              </v-col>
-          </v-row>
-      </v-container>
-    </v-card>
+        class=""
+      >
+        <v-img
+          src="https://cdn.vuetifyjs.com/images/cards/forest.jpg"
+          gradient="to top, rgba(0,0,0,.44), rgba(0,0,0,.44)"
+          height="200"
+        >
+          <v-container class="fill-height">
+            <v-row align="center">
+            <base-back  v-if="userDetails.firstname" />
+            </v-row>
+          </v-container>
+        </v-img>
+      </v-card>
+        <v-card-text class="py-0">
+          <v-timeline
+            align-top
+            dense
+          >
+            <v-timeline-item
+              color="pink"
+              small
+              fill-dot
+              class="pa-0 mt-5"
+            >
+              <v-row class="">
+                <v-col cols="6">
+                  <strong>NAME</strong>
+                </v-col>
+                <v-col>
+                  <strong
+                  class="text-capitalize">
+                  {{ userDetails.firstname}} {{ userDetails.lastname}}</strong>
+                </v-col>
+              </v-row>
+            </v-timeline-item>
+
+            <v-timeline-item
+              color="teal lighten-3"
+              small
+              fill-dot
+              class="pa-0"
+            >
+              <v-row class="">
+                <v-col cols="6">
+                  <strong>USERNAME:</strong>
+                </v-col>
+                <v-col>
+                  <strong>
+                    {{ userDetails.displayName ? '@' + userDetails.displayName : 'None' }}</strong>
+                </v-col>
+              </v-row>
+            </v-timeline-item>
+
+            <v-timeline-item
+              color="pink"
+              small
+              fill-dot
+              class="pa-0"
+            >
+              <v-row class="">
+                <v-col cols="6">
+                  <strong>AVERAGE RATINGS:</strong>
+                </v-col>
+                <v-col>
+                  <strong>
+                     {{ userDetails.averageRatings ? userDetails.averageRatings : 0 }}</strong>
+                </v-col>
+              </v-row>
+            </v-timeline-item>
+
+            <v-timeline-item
+              color="teal lighten-3"
+              small
+              fill-dot
+              class="pa-0"
+            >
+              <v-row class="">
+                <v-col cols="6">
+                  <strong>CODE SHARED</strong>
+                </v-col>
+                <v-col>
+                  <strong> {{ userDetails.codeShared }} times</strong>
+                </v-col>
+              </v-row>
+            </v-timeline-item>
+          </v-timeline>
+        </v-card-text>
+      </v-card>
+    </template>
   </div>
 </template>
 <script>
@@ -86,5 +159,9 @@ export default {
 };
 </script>
 <style scoped>
-
+.abs {
+  position: absolute;
+  right: 5rem;
+  top: 10rem;
+}
 </style>

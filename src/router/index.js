@@ -98,20 +98,24 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
-  console.log(to.name);
-  if (to.name === 'Home' && auth.currentUser) {
-    if (router.currentRoute.name === 'AuthHome') {
-      return;
+  try {
+    const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
+    console.log(to.name);
+    // if (to.name === 'Home' && auth.currentUser) {
+    //   if (router.currentRoute.name === 'AuthHome') {
+    //     return;
+    //   }
+
+    //   next({ name: 'AuthHome' });
+    // }
+
+    if (requiresAuth && !auth.currentUser) {
+      next('/login');
+    } else {
+      next();
     }
-
-    next({ name: 'AuthHome' });
-  }
-
-  if (requiresAuth && !auth.currentUser) {
-    next('/login');
-  } else {
-    next();
+  } catch (error) {
+    console.log(error);
   }
 });
 

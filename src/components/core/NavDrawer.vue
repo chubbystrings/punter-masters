@@ -9,7 +9,7 @@
       <v-list dense>
           <v-list-item two-line>
             <v-list-item-avatar v-if="auth">
-              <img  src="https://randomuser.me/api/portraits/men/81.jpg">
+              <img  :src="userProfile.photoURL">
             </v-list-item-avatar>
 
             <v-list-item-content v-if="auth">
@@ -143,6 +143,8 @@ export default {
           } else {
             this.$router.push({ name: word, params: { id: this.userProfile.userId } });
           }
+        } else if (word === 'Home' && this.auth) {
+          this.$router.push({ name: 'AuthHome' });
         } else {
           this.$router.push({ name: word });
         }

@@ -1,6 +1,7 @@
 <template>
   <div
-  class="divBorder mb-1"
+  :class="paginatedSharedCodes.length > 0 ? 'divBorder': ''"
+  class="mb-1"
   >
   <base-back  v-if="paginatedSharedCodes.length > 0" />
     <transition-group
@@ -49,8 +50,19 @@
               small
               class="caption"
               color="primary"
+              :disabled="code.userId === userProfile.userId"
             >
              rate code
+            </v-btn>
+             <v-btn
+             v-if="code.userId === userProfile.userId"
+              @click.stop="codeToDelete(code, i)"
+              text
+              small
+              class="caption text-lowercase"
+              color="primary"
+            >
+             Delete
             </v-btn>
             <v-spacer></v-spacer>
              <v-rating
@@ -65,6 +77,7 @@
               ></v-rating>
               <span class="mr-1 hidden-sm-and-down">
                 <v-btn
+                :disabled="code.userId === userProfile.userId"
                 icon
                 @click.prevent="thumbsUp(code, i)"
                 >
@@ -77,6 +90,7 @@
               </span>
               <span class="mr-1 hidden-sm-and-down">
                 <v-btn
+                :disabled="code.userId === userProfile.userId"
                  icon
                 @click.prevent="thumbsDown(code, i)"
                 >
@@ -164,6 +178,14 @@
   </v-card>
   </v-dialog>
   </v-row>
+  <p
+  style="width: 50vw; text-align: center"
+  v-if="paginatedSharedCodes.length <= 0"
+  class="display-1"
+  >
+  No codes yet
+  </p>
+  <base-dialog @delete="deleteCode" />
   </div>
 </template>
 <script>
@@ -182,6 +204,7 @@ export default {
     rating: 0,
     ratingDialog: false,
     selectedCodeInfo: {},
+    selectedCodeToDelete: {},
   }),
 
   computed: {
@@ -231,7 +254,6 @@ export default {
         this.codes.push({
           ...doc.data(),
           id: doc.id,
-          avatar: 'https://cdn.vuetifyjs.com/images/lists/4.jpg',
           averageRatings: Number((doc.data().ratings / doc.data().userRated).toFixed(1)),
         });
       });
@@ -270,10 +292,23 @@ export default {
 
           });
           this.ratingDialog = false;
+          this.$store.dispatch('updateRatings', this.selectedCodeInfo.userId);
+        } else {
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'error',
+            message: 'Oops seems code has been deleted',
+          });
+          this.ratingDialog = false;
         }
       } catch (error) {
         console.log(error);
         this.ratingDialog = false;
+        this.$store.commit('SET_ALERT', {
+          alert: true,
+          type: 'error',
+          message: 'Oops an Error occurred',
+        });
       }
     },
     rateCodeSelected(code, i) {
@@ -284,6 +319,23 @@ export default {
       this.ratingDialog = !this.ratingDialog;
     },
 
+    codeToDelete(code, i) {
+      this.selectedCodeToDelete = {
+        index: i,
+        ...code,
+      };
+      this.$store.commit('OPEN_ACTION_DIALOG', {
+        type: 'Delete Code',
+        message: 'Are you sure you want to delete code ?',
+      });
+    },
+
+    deleteCode() {
+      this.$store.dispatch('DeleteCode', this.selectedCodeToDelete.id);
+      const { index } = this.selectedCodeToDelete;
+      this.codes.splice(index, 1);
+    },
+
     cancel() {
       this.ratingDialog = false;
     },
@@ -291,24 +343,50 @@ export default {
     async thumbsUp(code, index) {
       try {
         const docRef = await codesCollection.doc(code.id).get();
-        await codesCollection.doc(code.id).update({
-          thumbsUp: docRef.data().thumbsUp + 1,
-        });
-        this.codes[index].thumbsUp += 1;
+        if (docRef.exists) {
+          await codesCollection.doc(code.id).update({
+            thumbsUp: docRef.data().thumbsUp + 1,
+          });
+          this.codes[index].thumbsUp += 1;
+        } else {
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'error',
+            message: 'Oops seems code has been deleted',
+          });
+        }
       } catch (error) {
         console.log(error);
+        this.$store.commit('SET_ALERT', {
+          alert: true,
+          type: 'error',
+          message: 'Oops an Error occurred',
+        });
       }
     },
 
     async thumbsDown(code, index) {
       try {
         const docRef = await codesCollection.doc(code.id).get();
-        await codesCollection.doc(code.id).update({
-          thumbsDown: docRef.data().thumbsDown + 1,
-        });
-        this.codes[index].thumbsDown += 1;
+        if (docRef.exists) {
+          await codesCollection.doc(code.id).update({
+            thumbsDown: docRef.data().thumbsDown + 1,
+          });
+          this.codes[index].thumbsDown += 1;
+        } else {
+          this.$store.commit('SET_ALERT', {
+            alert: true,
+            type: 'error',
+            message: 'Oops seems code has been deleted',
+          });
+        }
       } catch (error) {
         console.log(error);
+        this.$store.commit('SET_ALERT', {
+          alert: true,
+          type: 'error',
+          message: 'Oops an Error occurred',
+        });
       }
     },
 
