@@ -62,7 +62,7 @@ export default {
   }),
 
   beforeUpdate() {
-    this.$store.commit('OVERLAY_ON');
+    this.$store.commit('OVERLAY_ON', '');
   },
 
   updated() {

@@ -104,6 +104,7 @@
           </v-card-actions>
           <span class="mr-1 hidden-md-and-up">
             <v-btn
+            :disabled="code.userId === userProfile.userId"
             @click.prevent="thumbsUp(code, i)"
              icon
              >
@@ -116,6 +117,7 @@
           </span>
           <span class="ml-2 hidden-md-and-up">
             <v-btn
+            :disabled="code.userId === userProfile.userId"
             icon
             @click="thumbsDown(code, i)"
             >
@@ -248,7 +250,7 @@ export default {
 
   async created() {
     try {
-      this.$store.commit('OVERLAY_ON');
+      this.$store.commit('OVERLAY_ON', '');
       const docRef = await codesCollection.orderBy('createdOn', 'desc').get();
       docRef.forEach((doc) => {
         this.codes.push({

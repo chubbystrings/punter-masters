@@ -12,7 +12,7 @@
        <v-avatar>
          <v-img src="../../assets/logo2.png"></v-img>
        </v-avatar>
-      <span class="text-color title ml-3 mr-5 font-weight-light"
+      <span class="text-color title ml-3 mr-5 font-weight-light hidden-sm-and-down"
       style="cursor: pointer;"
       @click="goHome"
       >Punter Masters
@@ -30,7 +30,9 @@
       ></v-text-field>
 
       <v-spacer></v-spacer>
-      <span v-if="auth" class="pa-1 text-color">Sub: &#x20A6; 0.00</span>
+      <span v-if="auth" class="pa-1 text-color">
+        Sub: &#x20A6; {{ currentSub }}
+        </span>
        <v-avatar
        v-if="auth"
        size="30"
@@ -102,6 +104,18 @@ export default {
     currentRoute() {
       return this.$route.name === 'Home';
     },
+
+    currentSub() {
+      const sub = Number((this.userProfile.sub / 100).toFixed(2));
+      if (sub > 0) {
+        if (sub - Math.floor(sub) === 0) {
+          return `${sub}.00`;
+        }
+        return sub;
+      }
+
+      return '0.00';
+    },
   },
 
   methods: {
@@ -140,6 +154,13 @@ export default {
           return;
         }
         this.$router.push({ name: 'Settings' });
+      }
+
+      if (name === 'Deposit') {
+        if (this.$route.name === 'Deposit') {
+          return;
+        }
+        this.$router.push({ name: 'Deposit' });
       }
     },
   },

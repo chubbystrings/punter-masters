@@ -131,7 +131,7 @@ export default {
   },
 
   async created() {
-    this.$store.commit('OVERLAY_ON');
+    this.$store.commit('OVERLAY_ON', '');
     try {
       const user = await usersCollection.doc(this.$route.params.id).get();
       if (user.exists) {

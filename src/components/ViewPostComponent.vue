@@ -181,7 +181,7 @@ export default {
   },
   async created() {
     console.log('heyyyy');
-    this.$store.commit('OVERLAY_ON');
+    this.$store.commit('OVERLAY_ON', '');
     try {
       const docRef = await postsCollection.doc(this.$route.params.id).get();
       const docs = await commentsCollection.where('postId', '==', this.$route.params.id).orderBy('createdOn', 'desc').get();
@@ -294,7 +294,7 @@ export default {
         updatedOn: new Date(),
       };
 
-      this.$store.commit('OVERLAY_ON');
+      this.$store.commit('OVERLAY_ON', '');
 
       try {
         const postDoc = await postsCollection.doc(postData.postId).get();

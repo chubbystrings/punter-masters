@@ -55,7 +55,7 @@ export default {
     },
 
     loading() {
-      return this.posts.length <= 0 && this.overlay ? 'primary' : '';
+      return this.posts.length <= 0 && this.overlay.overlay ? 'primary' : '';
     },
   },
 

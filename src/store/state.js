@@ -23,6 +23,9 @@ export default {
   alerts: {
     alert: false,
   },
-  overlay: false,
+  overlay: {
+    overlay: false,
+    message: '',
+  },
   commentsData: [],
 };

@@ -1,6 +1,6 @@
 <template>
   <div >
-    <banter-room />
+    <Error />
   </div>
 </template>
 
@@ -9,10 +9,7 @@
 
 export default {
   components: {
-    BanterRoom: () => import('@/components/BanterRoomComponent.vue'),
+    Error: () => import('@/components/ReceiptErrorComponent.vue'),
   },
 };
 </script>
-<style scoped>
-
-</style>

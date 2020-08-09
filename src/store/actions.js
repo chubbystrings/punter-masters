@@ -1,5 +1,6 @@
 import * as fb from '../firebase';
 import router from '../router/index';
+import instance from '../services/payment-auth';
 
 const alert = (type, message) => {
   const msg = {
@@ -17,7 +18,7 @@ export default {
   // SIGN UP
   // eslint-disable-next-line no-unused-vars
   async signup({ commit, dispatch }, form) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
     // sign user up
     try {
       const defaultPhoto = 'https://avataaars.io/?avatarStyle=Circle&topType=LongHairFrida&accessoriesType=Kurt&hairColor=Red&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=GraphicShirt&clotheColor=Gray01&graphicType=Skull&eyeType=Wink&eyebrowType=RaisedExcitedNatural&mouthType=Disbelief&skinColor=Brown';
@@ -27,6 +28,8 @@ export default {
         lastname: form.lastname,
         codeShared: 0,
         photoURL: defaultPhoto,
+        email: form.email,
+        sub: 0,
       });
       await user.sendEmailVerification();
       await user.updateProfile({
@@ -46,7 +49,7 @@ export default {
   // LOG IN
   // eslint-disable-next-line no-unused-vars
   async login({ commit, dispatch, state }, form) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', 'Authenticating...');
     try {
       // sign in user
       const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password);
@@ -104,7 +107,7 @@ export default {
 
   // get a specific details for profile view
   async getUser({ commit }, id) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
     try {
       const user = await fb.usersCollection.doc(id).get();
       if (user.exists) {
@@ -120,7 +123,7 @@ export default {
 
   // USER CAN UPDATE OR SET USERNAME
   async changeUsername({ commit, dispatch }, username) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
 
     try {
       const user = fb.auth.currentUser;
@@ -144,7 +147,7 @@ export default {
 
   // USER CAN RESET PASSWORD
   async resetPassword({ commit }, email) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
     try {
       await fb.auth.sendPasswordResetEmail(email);
       commit('SET_ALERT', {
@@ -191,7 +194,7 @@ export default {
 
   // LOGOUT ACTION
   async logout({ commit }) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', 'Logging Out...');
     await fb.auth.signOut();
 
     // clear userProfile and redirect to /login
@@ -206,7 +209,7 @@ export default {
 
   // eslint-disable-next-line no-unused-vars
   async createPost({ commit, state }, post) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', 'Creating...');
     try {
       const postData = {
         createdOn: new Date(),
@@ -234,7 +237,7 @@ export default {
 
   // GET/LOAD ALL POSTS IN A FORUM
   async loadPosts({ commit }, forum) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
     try {
       const postArray = [];
       const snapshot = await fb.postsCollection.where('forumId', '==', forum).orderBy('createdOn', 'desc').get();
@@ -255,7 +258,7 @@ export default {
 
   // GET/VIEW A SINGLE POST IN A FORUM
   async getPost({ commit }, id) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
     try {
       const docRef = await fb.postsCollection.doc(id).get();
       const docs = await fb.commentsCollection.where('postId', '==', id).get();
@@ -328,7 +331,7 @@ export default {
       postId, userId, title, content,
     } = editData;
 
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', '');
 
     try {
       const postDoc = await fb.postsCollection.doc(postId).get();
@@ -359,7 +362,7 @@ export default {
   async deletePost({ commit }, postData) {
     const { postId, forumId, forum } = postData;
     const id = postId;
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', 'Deleting..');
     try {
       const postDoc = fb.postsCollection.doc(id);
       await postDoc.delete();
@@ -386,7 +389,7 @@ export default {
 
   // SHARE BETCODE ACTIONS
   async shareBetCode({ commit, state }, payload) {
-    commit('OVERLAY_ON');
+    commit('OVERLAY_ON', 'Sharing...');
     console.log(payload);
     let allRatings = 0;
     let overallUserRatings = 0;
@@ -442,7 +445,7 @@ export default {
 
   async DeleteCode({ commit }, id) {
     try {
-      commit('OVERLAY_ON');
+      commit('OVERLAY_ON', 'Deleting');
       await fb.codesCollection.doc(id).delete();
       console.log(id);
       await fb.notificationCollection.doc(id).delete();
@@ -486,5 +489,25 @@ export default {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  async deposit({ commit }, data) {
+    commit('OVERLAY_ON', 'connecting');
+    const url = '/paystack/pay';
+    const token = await fb.auth.currentUser.getIdToken();
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    instance.post(url, data, config)
+      .then((res) => {
+        console.log(res);
+        window.location = res.data.link;
+        commit('OVERLAY_OFF');
+      }).catch((error) => {
+        console.log(error);
+        commit('OVERLAY_OFF');
+      });
   },
 };

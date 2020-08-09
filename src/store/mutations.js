@@ -92,12 +92,14 @@ export default {
     state.actionDialog.action = true;
   },
 
-  OVERLAY_ON(state) {
-    state.overlay = true;
+  OVERLAY_ON(state, message) {
+    state.overlay.overlay = true;
+    state.overlay.message = message;
   },
 
   OVERLAY_OFF(state) {
-    state.overlay = false;
+    state.overlay.overlay = false;
+    state.overlay.message = '';
   },
 
   SET_ALERT(state, payload) {

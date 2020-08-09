@@ -29,7 +29,7 @@ const chatsCollection = db.collection('chats');
 const codesCollection = db.collection('codes');
 const notificationCollection = db.collection('notification');
 const commentLikesCollection = db.collection('comment_likes');
-
+const paymentsCollection = db.collection('payments');
 // export utils/refs
 export {
   db,
@@ -43,4 +43,6 @@ export {
   codesCollection,
   notificationCollection,
   commentLikesCollection,
+  paymentsCollection,
+
 };

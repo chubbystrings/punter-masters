@@ -41,6 +41,30 @@ const routes = [
     },
   },
   {
+    path: '/deposit',
+    name: 'Deposit',
+    component: () => import(/* webpackChunkName: "settings" */ '../views/Deposit.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/receipt/:id/success',
+    name: 'ReceiptSuccess',
+    component: () => import(/* webpackChunkName: "settings" */ '../views/ReceiptSuccess.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
+    path: '/receipt/:id/error',
+    name: 'ReceiptError',
+    component: () => import(/* webpackChunkName: "settings" */ '../views/ReceiptError.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/forums/:forum/:id',
     name: 'Forum',
     component: () => import(/* webpackChunkName: "settings" */ '../views/Forums.vue'),

@@ -105,7 +105,7 @@ export default {
   },
 
   created() {
-    this.$store.commit('OVERLAY_ON');
+    this.$store.commit('OVERLAY_ON', '');
     try {
       chatsCollection.orderBy('createdOn', 'desc').onSnapshot((snapshot) => {
         const chatsArray = [];

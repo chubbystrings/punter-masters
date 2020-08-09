@@ -1,6 +1,6 @@
 <template>
   <div >
-    <banter-room />
+    <deposit />
   </div>
 </template>
 
@@ -9,7 +9,7 @@
 
 export default {
   components: {
-    BanterRoom: () => import('@/components/BanterRoomComponent.vue'),
+    Deposit: () => import('@/components/DepositComponent.vue'),
   },
 };
 </script>
