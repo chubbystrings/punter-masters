@@ -65,11 +65,11 @@
     </v-timeline>
     <v-divider key="divider2"></v-divider>
     <v-pagination
+    v-if="paginatedComments.length > 0"
     key="pagination"
       v-model="page"
       :length="pages"
       circle
-      :disabled="paginatedComments.length <= 4"
     ></v-pagination>
     </transition-group>
   </div>
@@ -98,7 +98,6 @@ export default {
 
     liked() {
       const like = this.userLikedComments.filter((i) => i.userId === this.ID);
-      console.log(like);
       return like[0] !== undefined;
     },
 
@@ -139,7 +138,6 @@ export default {
     async commentLike(index, commentId, postId, likes, name) {
       // eslint-disable-next-line max-len
       const likedComment = this.userLikedComments.filter((i) => i.userId === this.ID && i.commentId === commentId);
-      console.log(likedComment);
       if (likedComment.length === 0) {
         this.paginatedComments[index].likes += 1;
         try {
@@ -213,10 +211,8 @@ export default {
   },
 
   async created() {
-    console.log(this.userProfile.userId);
     const docRef = await commentLikesCollection.where('userId', '==', auth.currentUser.uid).get();
     if (!docRef.empty) {
-      console.log('not empty');
       docRef.forEach((doc) => {
         this.userLikedComments.push({
           id: doc.id,

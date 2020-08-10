@@ -111,12 +111,10 @@ export default {
     try {
       const user = await fb.usersCollection.doc(id).get();
       if (user.exists) {
-        console.log(user);
         commit('CLICKED_USER_DETAILS', user.data());
       }
       commit('OVERLAY_OFF');
     } catch (error) {
-      console.log(error);
       commit('OVERLAY_OFF');
     }
   },
@@ -188,7 +186,6 @@ export default {
       dispatch('fetchUserProfile', user);
     } catch (error) {
       commit('SET_ALERT', alert('error', 'Ops something went wrong'));
-      console.log(error);
     }
   },
 
@@ -390,13 +387,11 @@ export default {
   // SHARE BETCODE ACTIONS
   async shareBetCode({ commit, state }, payload) {
     commit('OVERLAY_ON', 'Sharing...');
-    console.log(payload);
     let allRatings = 0;
     let overallUserRatings = 0;
     try {
       const userId = fb.auth.currentUser.uid;
       const docId = `${userId}_${payload.id}`;
-      console.log(docId);
       await fb.codesCollection.doc(docId).set({
         code: payload.code,
         userId,
@@ -447,14 +442,12 @@ export default {
     try {
       commit('OVERLAY_ON', 'Deleting');
       await fb.codesCollection.doc(id).delete();
-      console.log(id);
       await fb.notificationCollection.doc(id).delete();
       commit('SET_ALERT', alert('success', 'deleted successfully'));
       commit('CLOSE_ACTION_DIALOG');
       commit('OVERLAY_OFF');
     } catch (error) {
       commit('SET_ALERT', alert('error', 'Oops something went wrong'));
-      console.log(error);
       commit('OVERLAY_OFF');
     }
   },
@@ -485,9 +478,8 @@ export default {
       await fb.usersCollection.doc(id).update({
         averageRatings,
       });
-      console.log('DONE');
     } catch (error) {
-      console.log(error);
+      //
     }
   },
 
@@ -502,11 +494,10 @@ export default {
     };
     instance.post(url, data, config)
       .then((res) => {
-        console.log(res);
         window.location = res.data.link;
         commit('OVERLAY_OFF');
+      // eslint-disable-next-line no-unused-vars
       }).catch((error) => {
-        console.log(error);
         commit('OVERLAY_OFF');
       });
   },

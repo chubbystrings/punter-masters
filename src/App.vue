@@ -58,7 +58,6 @@ export default {
 
   async created() {
     if (window.innerWidth > 1200) {
-      console.log(window.innerWidth);
       this.$store.commit('OPEN_DRAWERS');
     }
 
@@ -71,7 +70,6 @@ export default {
 
   updated() {
     if (window.innerWidth > 1200) {
-      console.log(window.innerWidth);
       this.$store.commit('OPEN_DRAWERS');
     }
 

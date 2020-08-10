@@ -49,7 +49,11 @@ export default {
   }),
 
   computed: {
-    ...mapState(['shareDialog']),
+    ...mapState(['shareDialog', 'userProfile']),
+
+    auth() {
+      return Object.keys(this.userProfile).length > 1;
+    },
   },
 
   methods: {
@@ -68,18 +72,43 @@ export default {
       this.betForum = '';
       this.toggleDialog();
     },
+    async fetchData() {
+      if (this.auth) {
+        const querySnapshot = await forumsCollection.get();
+        querySnapshot.forEach((doc) => {
+          this.forums.push({
+            id: doc.id,
+            name: doc.data().name,
+            title: doc.data().title,
+          });
+          this.names.push(doc.data().name);
+        });
+      }
+    },
   },
 
   async created() {
-    const querySnapshot = await forumsCollection.get();
-    querySnapshot.forEach((doc) => {
-      this.forums.push({
-        id: doc.id,
-        name: doc.data().name,
-        title: doc.data().title,
+    if (this.auth) {
+      const querySnapshot = await forumsCollection.get();
+      querySnapshot.forEach((doc) => {
+        this.forums.push({
+          id: doc.id,
+          name: doc.data().name,
+          title: doc.data().title,
+        });
+        this.names.push(doc.data().name);
       });
-      this.names.push(doc.data().name);
-    });
+    }
+  },
+  updated() {
+    if (this.forums.length === 0) {
+      this.fetchData();
+    }
+  },
+
+  watch: {
+    // eslint-disable-next-line quote-props
+    '$route': 'fetchData',
   },
 };
 </script>

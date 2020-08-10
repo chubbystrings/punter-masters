@@ -77,9 +77,11 @@
                               <v-card
                               flat
                               style="width: 80vw"
+                              :loading="avatarLoad"
                               >
                                 <v-avatar class="mb-2" v-for="(avatar, i) in avatars" :key="i">
                                   <v-img
+                                  @load="onload"
                                   class="hoverImg"
                                   @click="confirm(avatar)"
                                   :src="avatar"
@@ -108,6 +110,7 @@ export default {
 
   data: () => ({
     loading: '',
+    avatarLoad: true,
     isTaken: true,
     username: '',
     displayName: false,
@@ -168,11 +171,12 @@ export default {
         message: 'Are you sure you want to Change Avatar ?',
       });
     },
-
+    onload() {
+      this.avatarLoad = false;
+    },
     async checkUsername() {
       this.loading = 'loading';
       const doc = await usersCollection.where('displayName', '==', this.username).get();
-      console.log(doc.size);
       if (doc.size > 0) {
         this.displayName = true;
         this.isTaken = true;
@@ -184,7 +188,6 @@ export default {
       }
     },
     select() {
-      console.log(this.selectedAvatar);
       this.$store.dispatch('updateAvatar', this.selectedAvatar);
       this.selectedAvatar = '';
       this.$store.commit('CLOSE_ACTION_DIALOG');

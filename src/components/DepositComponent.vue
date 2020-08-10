@@ -162,8 +162,9 @@ export default {
           meta: {
             customer_id: this.userProfile.userId,
           },
+          // eslint-disable-next-line no-unused-vars
           callback(data) {
-            console.log(data);
+            //
           },
           customizations: {
             title: 'Punter Masters',

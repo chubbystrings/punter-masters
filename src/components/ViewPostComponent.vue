@@ -180,7 +180,6 @@ export default {
     ...mapState(['commentsData', 'userProfile', 'actionDialog']),
   },
   async created() {
-    console.log('heyyyy');
     this.$store.commit('OVERLAY_ON', '');
     try {
       const docRef = await postsCollection.doc(this.$route.params.id).get();
@@ -211,7 +210,6 @@ export default {
       this.$store.commit('LOAD_COMMENTS', commentsArray);
       this.loading = '';
     } catch (error) {
-      console.log(error);
       this.$store.commit('OVERLAY_OFF');
       this.$store.commit('SET_ALERT', {
         alert: true,
@@ -224,7 +222,6 @@ export default {
 
   destroyed() {
     this.clear();
-    console.log('YASSSSSSS');
     this.$store.commit('CLEAR_COMMENT');
   },
 

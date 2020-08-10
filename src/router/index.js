@@ -105,7 +105,6 @@ const routes = [
       requiresAuth: true,
     },
     async beforeEnter(to, from, next) {
-      console.log(to.params);
       if (!to.params.id) {
         return;
       }
@@ -124,7 +123,6 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   try {
     const requiresAuth = to.matched.some((x) => x.meta.requiresAuth);
-    console.log(to.name);
     // if (to.name === 'Home' && auth.currentUser) {
     //   if (router.currentRoute.name === 'AuthHome') {
     //     return;
@@ -139,7 +137,7 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } catch (error) {
-    console.log(error);
+    //
   }
 });
 

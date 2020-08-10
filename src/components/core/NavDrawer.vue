@@ -155,7 +155,6 @@ export default {
       }
 
       if (action === 'commit') {
-        console.log(word);
         this.$store.commit(word);
       }
     },

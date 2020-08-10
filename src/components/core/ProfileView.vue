@@ -146,7 +146,6 @@ export default {
         });
       }
     } catch (error) {
-      console.log(error);
       this.$store.commit('OVERLAY_OFF');
       this.$router.go(-1);
       this.$store.commit('SET_ALERT', {

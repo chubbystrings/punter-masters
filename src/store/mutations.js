@@ -53,7 +53,6 @@ export default {
   },
   TOGGLE_BANTER_ROOM(state) {
     state.banterRoom = !state.banterRoom;
-    console.log(state.banterRoom);
   },
 
   OPEN_EDIT_DIALOG(state) {
@@ -88,7 +87,6 @@ export default {
   },
 
   OK_TO_ACTION(state) {
-    console.log('Yeaa do action');
     state.actionDialog.action = true;
   },
 
@@ -127,7 +125,6 @@ export default {
 
   SET_USER_PROFILE(state, val) {
     state.userProfile = val;
-    console.log(state.userProfile);
   },
 
   CLICKED_USER_DETAILS(state, val) {

@@ -98,7 +98,6 @@ export default {
     ...mapState(['drawer', 'userProfile']),
 
     auth() {
-      console.log(this.userProfile);
       return Object.keys(this.userProfile).length > 1;
     },
     currentRoute() {

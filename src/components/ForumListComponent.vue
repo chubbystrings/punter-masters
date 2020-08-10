@@ -45,7 +45,6 @@
       v-model="page"
       :length="pages"
       circle
-      :disabled="posts.length <= 1"
     ></v-pagination>
   </div>
 </div>
@@ -74,7 +73,6 @@ export default {
   watch: {
     // eslint-disable-next-line no-unused-vars
     $route(to, from) {
-      console.log('route changed loaded post from here');
       this.$store.dispatch('loadPosts', this.$route.params.id);
     },
   },
@@ -97,7 +95,6 @@ export default {
 
   filters: {
     formatDate(val) {
-      console.log(val);
       if (!val) { return '-'; }
       if (val.seconds) {
         return moment(Date.parse(val.toDate())).fromNow();
@@ -116,7 +113,6 @@ export default {
 
   // eslint-disable-next-line no-unused-vars
   // beforeRouteUpdate(to, from, next) {
-  //   console.log('Heyyy');
   //   this.loadPosts();
   // },
 
@@ -127,7 +123,6 @@ export default {
   },
 
   created() {
-    console.log('created loaded post from here');
     this.$store.dispatch('loadPosts', this.$route.params.id);
   },
 

@@ -1,7 +1,7 @@
 <template>
   <div
   :class="paginatedSharedCodes.length > 0 ? 'divBorder': ''"
-  class="mb-1"
+  class=""
   >
   <base-back  v-if="paginatedSharedCodes.length > 0" />
     <transition-group
@@ -17,7 +17,7 @@
         v-for="(code, i) in paginatedSharedCodes"
         :key="code.id"
         :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
-        class="pa-0 mt-2 mb-2 "
+        class="pa-0 mb-2 "
         small
       >
 
@@ -266,14 +266,12 @@ export default {
         type: 'error',
         message: 'Opps something went wrong',
       });
-      console.log(error);
       this.$store.commit('OVERLAY_OFF');
     }
   },
 
   methods: {
     async ok() {
-      console.log(this.selectedCodeInfo);
       try {
         const ratingsRef = await codesCollection.doc(this.selectedCodeInfo.id).get();
         if (ratingsRef.exists) {
@@ -304,7 +302,6 @@ export default {
           this.ratingDialog = false;
         }
       } catch (error) {
-        console.log(error);
         this.ratingDialog = false;
         this.$store.commit('SET_ALERT', {
           alert: true,
@@ -358,7 +355,6 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
         this.$store.commit('SET_ALERT', {
           alert: true,
           type: 'error',
@@ -383,7 +379,6 @@ export default {
           });
         }
       } catch (error) {
-        console.log(error);
         this.$store.commit('SET_ALERT', {
           alert: true,
           type: 'error',

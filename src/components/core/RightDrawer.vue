@@ -61,17 +61,33 @@ export default {
         this.$router.push({ name: 'Forum', params: { forum: route, id } });
       }
     },
+    async fetchData() {
+      if (this.auth) {
+        const querySnapshot = await forumsCollection.get();
+        querySnapshot.forEach((doc) => {
+          this.forums.push({
+            id: doc.id,
+            name: doc.data().name,
+            title: doc.data().title,
+          });
+        });
+      }
+    },
   },
 
   async created() {
-    const querySnapshot = await forumsCollection.get();
-    querySnapshot.forEach((doc) => {
-      this.forums.push({
-        id: doc.id,
-        name: doc.data().name,
-        title: doc.data().title,
-      });
-    });
+    this.fetchData();
+  },
+
+  updated() {
+    if (this.forums.length === 0) {
+      this.fetchData();
+    }
+  },
+
+  watch: {
+    // eslint-disable-next-line quote-props
+    '$route': 'fetchData',
   },
 };
 </script>

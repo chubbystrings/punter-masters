@@ -53,9 +53,7 @@ export default {
 
   methods: {
     ok() {
-      console.log(this.title);
-      console.log(this.content);
-      console.log(this.$route.params.id);
+      //
     },
 
     cancel() {
@@ -66,7 +64,6 @@ export default {
   created() {
     this.title = this.editTitle;
     this.content = this.editContent;
-    console.log(this.editContent);
   },
 };
 </script>
