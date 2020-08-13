@@ -62,7 +62,7 @@ export default {
       }
     },
     async fetchData() {
-      if (this.auth) {
+      if (this.auth && this.forums.length === 0) {
         const querySnapshot = await forumsCollection.get();
         querySnapshot.forEach((doc) => {
           this.forums.push({
