@@ -38,21 +38,28 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { forumsCollection } from '../../firebase';
 
 export default {
   data: () => ({
     betForum: '',
     betCode: '',
-    forums: [],
-    names: [],
   }),
 
   computed: {
-    ...mapState(['shareDialog', 'userProfile']),
+    ...mapState(['shareDialog', 'userProfile', 'forums']),
 
     auth() {
       return Object.keys(this.userProfile).length > 1;
+    },
+
+    names() {
+      const forumNames = [];
+      if (this.forums.length > 0) {
+        this.forums.forEach((forum) => {
+          forumNames.push(forum.name);
+        });
+      }
+      return forumNames;
     },
   },
 
@@ -72,43 +79,6 @@ export default {
       this.betForum = '';
       this.toggleDialog();
     },
-    async fetchData() {
-      if (this.auth) {
-        const querySnapshot = await forumsCollection.get();
-        querySnapshot.forEach((doc) => {
-          this.forums.push({
-            id: doc.id,
-            name: doc.data().name,
-            title: doc.data().title,
-          });
-          this.names.push(doc.data().name);
-        });
-      }
-    },
-  },
-
-  async created() {
-    if (this.auth && this.forums.length === 0) {
-      const querySnapshot = await forumsCollection.get();
-      querySnapshot.forEach((doc) => {
-        this.forums.push({
-          id: doc.id,
-          name: doc.data().name,
-          title: doc.data().title,
-        });
-        this.names.push(doc.data().name);
-      });
-    }
-  },
-  updated() {
-    if (this.forums.length === 0) {
-      this.fetchData();
-    }
-  },
-
-  watch: {
-    // eslint-disable-next-line quote-props
-    '$route': 'fetchData',
   },
 };
 </script>

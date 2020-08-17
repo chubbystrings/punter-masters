@@ -12,6 +12,9 @@ export default {
     state.post = {};
     state.commentsData = [];
   },
+  SET_FORUMS(state, forums) {
+    state.forums = forums;
+  },
 
   /** **************** APPLICATION MUTATIONS *********** */
   SHOW_NOTIFICATION(state, data) {

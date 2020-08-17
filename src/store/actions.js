@@ -90,6 +90,17 @@ export default {
   async fetchUserProfile({ commit }, user) {
     // fetch user profile
     const userProfile = await fb.usersCollection.doc(user.uid).get();
+    const forums = [];
+    const querySnapshot = await fb.forumsCollection.get();
+    querySnapshot.forEach((doc) => {
+      forums.push({
+        id: doc.id,
+        name: doc.data().name,
+        title: doc.data().title,
+      });
+    });
+
+    commit('SET_FORUMS', forums);
 
     // set user profile in state
     const data = {

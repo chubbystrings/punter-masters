@@ -33,15 +33,13 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { forumsCollection } from '../../firebase';
 
 export default {
   data: () => ({
-    forums: [],
     rightDrawer: true,
   }),
   computed: {
-    ...mapState(['userProfile', 'openRightDrawer']),
+    ...mapState(['userProfile', 'openRightDrawer', 'forums']),
     auth() {
       return Object.keys(this.userProfile).length > 1;
     },
@@ -61,34 +59,12 @@ export default {
         this.$router.push({ name: 'Forum', params: { forum: route, id } });
       }
     },
-    async fetchData() {
-      if (this.auth && this.forums.length === 0) {
-        const querySnapshot = await forumsCollection.get();
-        querySnapshot.forEach((doc) => {
-          this.forums.push({
-            id: doc.id,
-            name: doc.data().name,
-            title: doc.data().title,
-          });
-        });
-      }
-    },
   },
 
-  async created() {
-    this.fetchData();
-  },
-
-  updated() {
-    if (this.forums.length === 0) {
-      this.fetchData();
-    }
-  },
-
-  watch: {
-    // eslint-disable-next-line quote-props
-    '$route': 'fetchData',
-  },
+  // watch: {
+  //   // eslint-disable-next-line quote-props
+  //   '$route': 'fetchData',
+  // },
 };
 </script>
 <style scoped>

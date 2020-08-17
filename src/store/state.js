@@ -1,4 +1,5 @@
 export default {
+  forums: [],
   drawer: false,
   userProfile: {},
   userDetails: {},
