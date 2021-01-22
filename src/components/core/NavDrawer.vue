@@ -85,6 +85,19 @@
           </v-list-item-content>
         </v-list-item>
 
+         <v-list-item link v-if="auth"
+        @click="doAction('route', 'Rollover')"
+        >
+          <v-list-item-action>
+            <v-icon color="primary">mdi-gamepad</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="text-color">
+                 ROLLOVER GAME
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item
         @click="doAction('route', 'Settings')"
          link v-if="auth"

@@ -30,6 +30,7 @@ export default {
         photoURL: defaultPhoto,
         email: form.email,
         sub: 0,
+        rollover: false,
       });
       await user.sendEmailVerification();
       await user.updateProfile({

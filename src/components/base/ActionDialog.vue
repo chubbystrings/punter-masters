@@ -6,8 +6,35 @@
         <v-card-text class="white--text">{{actionDialog.message}}</v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
+          <div v-if="actionDialog.type === 'Delete'">
           <v-btn color="white" text @click="cancel">Cancel</v-btn>
           <v-btn color="white" text @click="ok">ok</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Confirm'">
+            <v-btn color="white" text @click="no">No</v-btn>
+            <v-btn color="white" text @click="yes">Yes</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Duplicate'">
+            <v-btn color="white" text @click="cancel">Back</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Congratulations'">
+            <v-btn color="white" text @click="cancel">Back</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Start'">
+            <v-btn color="white" text @click="no">No Yet</v-btn>
+            <v-btn color="white" text @click="yes">Yes Please</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Cancel Game'">
+            <v-btn color="white" text @click="no">No</v-btn>
+            <v-btn color="white" text @click="yes">Yes Please</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'New Game'">
+            <v-btn color="white" text @click="no">No</v-btn>
+            <v-btn color="white" text @click="yes">Yes Please</v-btn>
+          </div>
+          <div v-if="actionDialog.type === 'Game Lost'">
+            <v-btn color="white" text @click="cancel">Back</v-btn>
+          </div>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -25,11 +52,34 @@ export default {
 
   computed: {
     ...mapState(['actionDialog']),
+    deleteType() {
+      return this.actionDialog.type === 'Delete';
+    },
+
+    duplicateType() {
+      return this.actionDialog.type === 'Duplicate';
+    },
+
+    confirmType() {
+      return this.actionDialog.type === 'Confirm';
+    },
+
+    startType() {
+      return this.actionDialog.type === 'Start';
+    },
   },
 
   methods: {
     ok() {
       this.$emit('delete');
+    },
+
+    yes() {
+      this.$emit('yes');
+    },
+
+    no() {
+      this.$emit('no');
     },
 
     cancel() {

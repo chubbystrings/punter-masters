@@ -49,6 +49,14 @@ const routes = [
     },
   },
   {
+    path: '/rollover',
+    name: 'Rollover',
+    component: () => import(/* webpackChunkName: "settings" */ '../views/Rollover.vue'),
+    meta: {
+      requiresAuth: true,
+    },
+  },
+  {
     path: '/receipt/:id/success',
     name: 'ReceiptSuccess',
     component: () => import(/* webpackChunkName: "settings" */ '../views/ReceiptSuccess.vue'),

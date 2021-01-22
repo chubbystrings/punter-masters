@@ -1,6 +1,6 @@
 <template>
   <div
-  :class="paginatedSharedCodes.length > 0 ? 'divBorder': ''"
+  :class="paginatedSharedCodes.length > 0 ? '': ''"
   class=""
   >
   <base-back  v-if="paginatedSharedCodes.length > 0" />
@@ -208,24 +208,19 @@ export default {
     selectedCodeInfo: {},
     selectedCodeToDelete: {},
   }),
-
   computed: {
     ...mapState(['sharedCodes', 'userProfile']),
-
     pages() {
       return (
         this.codes.length > 5
           ? Math.ceil(this.codes.length / 5) : 1);
     },
-
     paginatedSharedCodes() {
       const start = (this.page - 1) * 5;
       const stop = this.page * 5;
-
       return this.codes ? this.codes.slice(start, stop) : '';
     },
   },
-
   filters: {
     formatDate(val) {
       if (!val) { return '-'; }
@@ -238,16 +233,13 @@ export default {
       if (val.length < 200) { return val; }
       return `${val.substring(0, 200)}...`;
     },
-
     lowerCase(val) {
       return val.toLowerCase();
     },
-
     upperCase(val) {
       return val.toUpperCase();
     },
   },
-
   async created() {
     try {
       this.$store.commit('OVERLAY_ON', '');
@@ -269,7 +261,6 @@ export default {
       this.$store.commit('OVERLAY_OFF');
     }
   },
-
   methods: {
     async ok() {
       try {
@@ -289,7 +280,6 @@ export default {
             alert: true,
             type: 'success',
             message: 'Thanks for rating!!!',
-
           });
           this.ratingDialog = false;
           this.$store.dispatch('updateRatings', this.selectedCodeInfo.userId);
@@ -317,7 +307,6 @@ export default {
       };
       this.ratingDialog = !this.ratingDialog;
     },
-
     codeToDelete(code, i) {
       this.selectedCodeToDelete = {
         index: i,
@@ -328,17 +317,14 @@ export default {
         message: 'Are you sure you want to delete code ?',
       });
     },
-
     deleteCode() {
       this.$store.dispatch('DeleteCode', this.selectedCodeToDelete.id);
       const { index } = this.selectedCodeToDelete;
       this.codes.splice(index, 1);
     },
-
     cancel() {
       this.ratingDialog = false;
     },
-
     async thumbsUp(code, index) {
       try {
         const docRef = await codesCollection.doc(code.id).get();
@@ -362,7 +348,6 @@ export default {
         });
       }
     },
-
     async thumbsDown(code, index) {
       try {
         const docRef = await codesCollection.doc(code.id).get();
@@ -386,7 +371,6 @@ export default {
         });
       }
     },
-
     openUser(user) {
       this.$router.push({ name: 'Profile', params: { id: user.userId } });
     },

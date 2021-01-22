@@ -30,6 +30,8 @@ const codesCollection = db.collection('codes');
 const notificationCollection = db.collection('notification');
 const commentLikesCollection = db.collection('comment_likes');
 const paymentsCollection = db.collection('payments');
+const gamesCollection = db.collection('games');
+const selectionsCollection = db.collection('selections');
 // export utils/refs
 export {
   db,
@@ -44,5 +46,7 @@ export {
   notificationCollection,
   commentLikesCollection,
   paymentsCollection,
+  gamesCollection,
+  selectionsCollection,
 
 };

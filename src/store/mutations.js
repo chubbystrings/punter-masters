@@ -42,6 +42,10 @@ export default {
   TOGGLE_DRAWER(state) {
     state.drawer = !state.drawer;
   },
+  DRAWER_FALSE(state) {
+    state.drawer = false;
+    state.openRightDrawer = false;
+  },
 
   TOGGLE_SHARE_DIALOG(state) {
     state.shareDialog = !state.shareDialog;

@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div ref="scrollComponent">
+    <transition-group
+    mode="out-in"
+    enter-active-class="animated fadeIn"
+    leave-active-class="animated fadeOut"
+    >
     <v-divider key="divider"></v-divider>
     <v-timeline key="timeline" dense v-if="paginatedComments.length > 0"
       class="pt-1"
@@ -12,12 +17,6 @@
         small
         fill-dot
       >
-
-      <transition-group
-    mode="out-in"
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-    >
 
         <v-card class="mx-n5"
         rounded
@@ -62,17 +61,16 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-          </transition-group>
       </v-timeline-item>
     </v-timeline>
-    <v-divider key="divider2"></v-divider>
-    <v-pagination
-    v-if="paginatedComments.length > 0"
-    key="pagination"
-      v-model="page"
-      :length="pages"
-      circle
-    ></v-pagination>
+    </transition-group>
+    <div class="text-center">
+    <v-progress-circular
+        v-if="loading"
+      indeterminate
+      color="primary"
+    ></v-progress-circular>
+    </div>
   </div>
 </template>
 <script>
@@ -88,6 +86,8 @@ export default {
     postComments: [],
     page: 1,
     userLikedComments: [],
+    limit: 5,
+    loading: false,
   }),
 
   computed: {
@@ -109,8 +109,8 @@ export default {
     },
 
     paginatedComments() {
-      const start = (this.page - 1) * 5;
-      const stop = this.page * 5;
+      const start = (this.page - 1) * this.limit;
+      const stop = this.page * this.limit;
 
       return this.commentsData ? this.commentsData.slice(start, stop) : '';
     },
@@ -135,6 +135,23 @@ export default {
   },
 
   methods: {
+    limitIncrement() {
+      console.log(this.paginatedComments.length);
+      if (this.commentsData.length > this.limit) {
+        this.loading = true;
+        console.log('reached limit');
+        setTimeout(() => {
+          this.loading = false;
+          this.limit += this.limit;
+        }, 3000);
+      }
+    },
+    handleScroll() {
+      console.log('scrolled');
+      if (this.$refs.scrollComponent.getBoundingClientRect().bottom < window.innerHeight) {
+        this.limitIncrement();
+      }
+    },
     // eslint-disable-next-line no-unused-vars
     async commentLike(index, commentId, postId, likes, name) {
       // eslint-disable-next-line max-len
@@ -221,6 +238,12 @@ export default {
         });
       });
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll);
   },
 };
 </script>

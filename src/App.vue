@@ -1,5 +1,5 @@
 <template>
-  <v-app id="keep" >
+  <v-app id="keep">
     <base-alert />
     <base-overlay />
     <nav-drawer />
@@ -53,6 +53,7 @@ export default {
   beforeDestroy() {
     if (typeof window !== 'undefined') {
       window.removeEventListener('resize', this.onResize, { passive: true });
+      window.removeEventListener('transitionend', { passive: true });
     }
   },
 
@@ -83,12 +84,21 @@ export default {
   mounted() {
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
+    window.addEventListener('transitionend', this.removeNavDrawer);
   },
 
   methods: {
     onResize() {
       if (window.innerWidth > 1200) {
         this.$store.commit('OPEN_DRAWERS');
+      }
+    },
+    removeNavDrawer(event) {
+      const ans = event.path.map((f) => f.className)
+        .filter((n) => n === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile theme--light secondary'
+        || n === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile v-navigation-drawer--right theme--light');
+      if (ans.length > 0) {
+        this.$store.commit('DRAWER_FALSE');
       }
     },
   },
@@ -130,5 +140,9 @@ export default {
   bottom: 0.4rem;
   left: 0;
   right: 0;
+}
+
+button {
+  outline: none !important;
 }
 </style>
