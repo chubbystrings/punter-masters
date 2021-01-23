@@ -313,7 +313,7 @@ export default {
         ...code,
       };
       this.$store.commit('OPEN_ACTION_DIALOG', {
-        type: 'Delete Code',
+        type: 'Delete',
         message: 'Are you sure you want to delete code ?',
       });
     },
