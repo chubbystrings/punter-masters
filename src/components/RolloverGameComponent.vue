@@ -94,6 +94,7 @@
                     dense
                     @change="changeGoal"
                     :disabled="started"
+                    filled
                   ></v-select>
                 </v-col>
                 <v-col class="d-flex" cols="12" sm="6">
@@ -689,6 +690,18 @@ export default {
       if (this.actionDialog.type === 'Cancel Game') {
         this.closeDialog();
         this.reset();
+        const alert = {
+          type: 'success',
+          message: 'Game Cancelled!!!',
+        };
+        this.alert(alert);
+        const outcome = {
+          gameWon: false,
+          status: 'completed',
+        };
+        const gameId = await this.getGameId();
+        this.updateGame(outcome, gameId);
+        this.closeGame();
       }
 
       if (this.actionDialog.type === 'New Game') {
