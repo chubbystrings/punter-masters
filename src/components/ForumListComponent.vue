@@ -1,6 +1,23 @@
 <template>
 <div>
-    <v-list three-line v-for="(item) in paginatedPosts" :key="item.id">
+  <base-card
+  v-for="item in paginatedPosts"
+  :key="item.id"
+  @click="openPost(item.id, item.forum)"
+  class="hover"
+  >
+  <header>
+     <v-avatar size="32" class="mr-3">
+      <v-img :src="item.userAvatar"></v-img>
+    </v-avatar>
+    <h3>{{ item.title }}</h3>
+  </header>
+  <small class="primary--text">
+    posted by {{item.name }} posted {{item.createdOn | formatDate}}
+  </small>
+  <p>{{ item.content | trimLength }}</p>
+  </base-card>
+    <!-- <v-list three-line v-for="(item) in paginatedPosts" :key="item.id">
         <v-divider
           :key="item.content"
           class="pt-0"
@@ -38,7 +55,7 @@
             </v-badge>
           </v-list-item-action>
         </v-list-item>
-    </v-list>
+    </v-list> -->
     <v-divider></v-divider>
      <div v-if="posts.length > 0" class="text-center">
     <v-pagination
@@ -102,8 +119,8 @@ export default {
       return moment(Date.parse(val)).fromNow();
     },
     trimLength(val) {
-      if (val.length < 200) { return val; }
-      return `${val.substring(0, 200)}...`;
+      if (val.length < 100) { return val; }
+      return `${val.substring(0, 100)}...`;
     },
 
     upperCase(val) {
@@ -133,6 +150,7 @@ export default {
 
 .hover:hover {
     background-color: #FCE4EC;
+    cursor: pointer;
 }
 .v-pagination__item, .v-pagination__navigation {
   outline: none !important;
@@ -140,6 +158,35 @@ export default {
 
 div {
   transition: all .3s ease-out;
+}
+
+ li {
+  margin: auto;
+  max-width: 40rem;
+}
+
+header {
+  display: flex;
+  align-items: center;
+}
+
+h3 {
+  font-size: 1.25rem;
+  margin: 0.5rem 0;
+}
+
+p {
+  margin: 0.5rem 0;
+}
+
+a {
+  text-decoration: none;
+  color: #ce5c00;
+}
+
+a:hover,
+a:active {
+  color: #c89300;
 }
 
 </style>
