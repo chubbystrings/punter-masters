@@ -70,7 +70,6 @@ export default {
         message: 'Opps something went wrong',
       });
       this.loading = false;
-      console.log(error);
     }
   },
   methods: {
