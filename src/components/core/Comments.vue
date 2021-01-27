@@ -1,7 +1,52 @@
 <template>
   <div>
     <v-divider key="divider"></v-divider>
-    <v-timeline key="timeline" dense v-if="paginatedComments.length > 0"
+    <user-comment
+      v-for="(comment, i) in paginatedComments"
+      :key="comment.comment"
+    >
+      <template v-slot:img>
+        <div id="img---slot">
+          <v-avatar size="54"
+          :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
+          >
+          </v-avatar>
+        </div>
+      </template>
+      <template v-slot:default>
+         <small class="primary--text mt-1">
+            {{ comment.name }}commented {{ comment.createdOn | formatDate}}
+          </small>
+        <section>
+          <p>{{ comment.content }}</p>
+        </section>
+        <nav>
+          <v-btn
+            id="likesBtn"
+            icon
+            right
+            @click.prevent="commentLike(i, comment.id, comment.postId,
+            comment.likes, comment.name)"
+          >
+            <v-badge
+            color="accent"
+            :content="comment.likes ? comment.likes : '0'"
+            inline
+            class="mr-2"
+            >
+              <v-icon
+              :color="userLikedComments.filter((i) =>
+                i.commentId === comment.id && i.userId === ID).length > 0 ?
+                'primary' : ''"
+              >
+                mdi-heart
+              </v-icon>
+            </v-badge>
+          </v-btn>
+        </nav>
+      </template>
+    </user-comment>
+    <!-- <v-timeline key="timeline" dense v-if="paginatedComments.length > 0"
       class="pt-1"
     >
       <v-timeline-item
@@ -64,7 +109,7 @@
         </v-card>
           </transition-group>
       </v-timeline-item>
-    </v-timeline>
+    </v-timeline> -->
     <v-divider key="divider2"></v-divider>
     <v-pagination
     v-if="paginatedComments.length > 0"
@@ -82,6 +127,9 @@ import { mapState } from 'vuex';
 import { commentLikesCollection, auth, commentsCollection } from '../../firebase';
 
 export default {
+  components: {
+    UserComment: () => import('./Comment.vue'),
+  },
   data: () => ({
     reverse: true,
     fullPost: {},
@@ -229,7 +277,10 @@ export default {
 .v-pagination__item, .v-pagination__navigation {
   outline: none !important;
 }
-div {
-  transition: all .3s ease-out;
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1rem
 }
 </style>

@@ -7,10 +7,16 @@
   class="hover"
   >
   <header>
-     <v-avatar size="32" class="mr-3">
-      <v-img :src="item.userAvatar"></v-img>
-    </v-avatar>
-    <h3>{{ item.title }}</h3>
+    <div>
+      <v-avatar size="32" class="mr-3">
+        <v-img :src="item.userAvatar"></v-img>
+      </v-avatar>
+      <span>{{ item.title }}</span>
+    </div>
+    <div>
+      <v-icon color="primary">mdi-comment-outline</v-icon><span>{{ item.comments}}</span>
+      <v-icon color="primary">mdi-heart-outline</v-icon><span>{{ item.likes}}</span>
+    </div>
   </header>
   <small class="primary--text">
     posted by {{item.name }} posted {{item.createdOn | formatDate}}
@@ -168,6 +174,7 @@ div {
 header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 
 h3 {
