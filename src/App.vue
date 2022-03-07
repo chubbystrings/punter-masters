@@ -7,7 +7,7 @@
     <app-bar />
     <v-main
     class="pt-11"
-    :class="homeRoute ? 'backGcolor': ''"
+    :class=" homeBackground ? 'backGcolor': ''"
     >
       <v-container
         fluid
@@ -110,6 +110,10 @@ export default {
 
     homeRoute() {
       return this.$route.name === 'Home';
+    },
+
+    homeBackground() {
+      return this.$route.name === 'Home' || this.$route.name === 'Login' || this.$route.name === 'Signup';
     },
   },
 };

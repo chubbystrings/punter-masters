@@ -142,7 +142,7 @@ export default {
     },
 
     currentRoute() {
-      return this.$route.name === 'Home';
+      return this.$route.name === 'Home' || this.$route.name === 'Login' || this.$route.name === 'Signup';
     },
   },
 
