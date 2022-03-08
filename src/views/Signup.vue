@@ -1,11 +1,5 @@
 <template>
-  <div class="text-center">
-    <img
-    style="height: 7rem; width: 7rem"
-     @load="onload"
-     alt="punter masters logo"
-     src="../assets/logo2.png"
-     >
+  <div class="">
     <signup />
   </div>
 </template>
@@ -15,7 +9,7 @@
 
 export default {
   components: {
-    Signup: () => import('@/components/SignupComponent.vue'),
+    Signup: () => import('@/components/NewSignupComponent.vue'),
   },
 
   data: () => ({
