@@ -2,8 +2,8 @@
      <v-app-bar
       app
       clipped-left
-      color="primary"
-      :flat="currentRoute"
+      :color="noAuthRoutes ? 'transparent' : 'primary'"
+      :flat="noAuthRoutes"
     >
       <v-app-bar-nav-icon
       v-if="!currentRoute"
@@ -102,6 +102,10 @@ export default {
     },
     currentRoute() {
       return this.$route.name === 'Home';
+    },
+
+    noAuthRoutes() {
+      return this.$route.name === 'Home' || this.$route.name === 'Login' || this.$route.name === 'Signup';
     },
 
     currentSub() {

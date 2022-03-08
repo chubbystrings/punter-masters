@@ -7,7 +7,7 @@
     <app-bar />
     <v-main
     class="pt-11"
-    :class="homeRoute ? 'backGcolor': ''"
+    :class=" homeBackground ? 'backGcolor': 'no-auth-color'"
     >
       <v-container
         fluid
@@ -20,7 +20,7 @@
           >
             <transition mode="out-in"
               enter-active-class="animated fadeIn"
-              leave-active-class="animated fadeOutLeftBig">
+              leave-active-class="animated fadeOut">
               <router-view />
             </transition>
           </v-col>
@@ -111,6 +111,10 @@ export default {
     homeRoute() {
       return this.$route.name === 'Home';
     },
+
+    homeBackground() {
+      return this.$route.name === 'Home';
+    },
   },
 };
 </script>
@@ -128,7 +132,13 @@ export default {
 .divBorder {
   border: 1px solid #a38d65;
 }
-
+.no-auth-color {
+  background-image: url('./assets/circle-scatter.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-origin: border-box;
+}
 .backGcolor {
   background-color: #AD1457;
 }
