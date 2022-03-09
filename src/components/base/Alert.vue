@@ -6,10 +6,10 @@
     >
     <v-snackbar
       v-model="snackbar"
-      :color="alerts.type === 'success' ? 'primary' : 'error'"
+      :color="alerts.type === 'success' ? 'green' : 'error'"
       :timeout="timeout"
       top
-      centered
+      right
     >
     <v-spacer></v-spacer>
       {{ alerts.message }}

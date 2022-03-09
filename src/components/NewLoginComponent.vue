@@ -1,6 +1,5 @@
 <template>
   <v-container class="card-container">
-    <base-square :styles="{top: '20px', right: '50%', background: '#AD1457'}"></base-square>
     <v-card :loading="loading" class="mx-auto my-12 login-card" elevation="8">
       <v-img height="200" src="../assets/umbrella.jpg"></v-img>
 
