@@ -19,8 +19,9 @@
           <v-col :class="homeRoute ? '' : 'shrink'"
           >
             <transition mode="out-in"
-              enter-active-class="animated fadeIn"
-              leave-active-class="animated fadeOut">
+              name="route"
+              appear
+              >
               <router-view />
             </transition>
           </v-col>
@@ -120,7 +121,7 @@ export default {
 </script>
 
 <style>
-@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
+/* @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"; */
 #keep .v-navigation-drawer__border {
   background-color: #a38d65;
   /* display: none; */
@@ -154,5 +155,20 @@ export default {
 
 button {
   outline: none !important;
+}
+
+.route-enter-from,
+.route-leave-to {
+  opacity: 0;
+}
+
+.route-enter-active,
+.route-leave-active {
+  transition: all 0.3s ease-out;
+}
+
+.route-enter-to,
+.route-leave-from {
+  opacity: 1;
 }
 </style>
