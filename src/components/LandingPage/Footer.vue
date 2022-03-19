@@ -4,12 +4,36 @@
       <small>Created by Soft Code aka Chubbystrings</small>
     </div>
     <div class="designed">
-
+      <v-icon
+      small
+      color="#fff"
+    >
+      mdi-twitter
+    </v-icon>
+    <v-icon
+      small
+      color="#fff"
+    >
+      mdi-linkedin
+    </v-icon>
+    <v-icon
+      small
+      color="#fff"
+    >
+      mdi-github
+    </v-icon>
+    <v-icon
+      small
+      color="#fff"
+    >
+      mdi-facebook
+    </v-icon>
     </div>
   </div>
 </template>
 
 <script>
+
 export default {
 
 };
@@ -26,11 +50,12 @@ export default {
 
 .socials {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
   background: #EDE9F2;
   width: 100%;
   height: 50px;
+  font-size: 12px;
 }
 
 .designed {
@@ -40,5 +65,6 @@ export default {
   background: #260D40;
   width: 100%;
    height: 100px;
+   gap: 20px;
 }
 </style>

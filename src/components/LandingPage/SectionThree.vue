@@ -68,7 +68,6 @@ export default {
   },
 
   beforeDestroy() {
-    console.log('yupppp');
     this.tween.kill();
   },
 };

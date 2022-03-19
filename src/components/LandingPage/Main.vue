@@ -1,5 +1,5 @@
 <template>
-  <div class="main--wrapper">
+  <div class="main--wrapper" :style="{ zIndex: !preloader ? 2 : -1 }">
     <Header />
     <div class="sections-wrapper" ref="mainRef">
       <section-one></section-one>
@@ -19,6 +19,10 @@ import Header from './Header.vue';
 import Footer from './Footer.vue';
 
 export default {
+  data: () => ({
+    tween: null,
+  }),
+  props: ['preloader'],
   components: {
     SectionOne,
     SectionTwo,
@@ -27,20 +31,31 @@ export default {
     Footer,
   },
 
+  methods: {
+
+  },
+
   mounted() {
-    gsap.fromTo(
+    this.tween = gsap.from(
       this.$refs.mainRef,
       {
         opacity: 0,
-      },
-      {
-        opacity: 1,
         delay: 0.5,
-        duration: 0.5,
+        duration: 1,
+        paused: true,
       },
     );
   },
+
+  watch: {
+    preloader(val) {
+      if (!val) {
+        this.tween.play();
+      }
+    },
+  },
 };
+
 </script>
 
 <style scoped>

@@ -73,6 +73,7 @@ export default {
   top: 0;
   height: 100px;
   border: 1px solid red;
+  z-index: 1 !important;
 }
 
 .header-out {

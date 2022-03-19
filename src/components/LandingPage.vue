@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Preloader v-on:done="preloader = false"  v-if="preloader"/>
-    <Main v-else />
+    <Preloader @done="preloader = false" />
+    <Main :preloader="preloader" />
   </div>
 </template>
 

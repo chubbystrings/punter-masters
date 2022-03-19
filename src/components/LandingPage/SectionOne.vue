@@ -2,7 +2,7 @@
   <section class="section-one" ref="sectionOne">
   <div class="section-wrapper" ref="wrapper">
       <base-square
-      :styles="{ top: '-25px', right: '45px', background: '#8E6BBF' }"
+      :styles="{ top: '50px', left: '-10px', background: '#8E6BBF' }"
       ref="parentRef"
       class="baseOne"
     >
@@ -44,20 +44,19 @@ export default {
     gsap.from(contentOne('.animOne'), {
       opacity: 0,
       y: 30,
-      duration: 1,
+      duration: 0.5,
       stagger: 0.2,
       ease: 'none',
-      delay: 1.5,
     });
 
     gsap.from(
       this.$refs.parentRef.$refs.baseEl,
       {
         opacity: 0,
-        y: 50,
+        x: -50,
         ease: 'none',
-        duration: 1,
-        delay: 1.5,
+        duration: 0.5,
+
       },
     );
 
@@ -65,8 +64,7 @@ export default {
       opacity: 0,
       y: 30,
       ease: 'none',
-      duration: 1,
-      delay: 1.5,
+      duration: 0.5,
     });
 
     this.tween = gsap.timeline({
@@ -83,7 +81,7 @@ export default {
         this.$refs.parentRef.$refs.baseEl,
         {
           opacity: 0,
-          y: 50,
+          x: -50,
           duration: 3,
           ease: 'none',
           delay: 1,
