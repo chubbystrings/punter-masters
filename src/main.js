@@ -6,6 +6,7 @@ import store from './store';
 import vuetify from './plugins/vuetify';
 import './plugins/base';
 import { auth } from './firebase';
+import './assets/main.css';
 
 Vue.config.productionTip = false;
 

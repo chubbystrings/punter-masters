@@ -1,18 +1,5 @@
 <template>
-  <div class="home text-center">
-    <transition mode="out-in"
-    enter-active-class="animated headShake"
-    leave-active-class="animated fadeOut"
-    >
-    <img @load="onload" alt="punter masters logo" src="../assets/logo2.png">
-    </transition>
-    <transition mode="out-in"
-     enter-active-class="animated headShake"
-    leave-active-class="animated fadeOut"
-    >
-    <HelloWorld v-if="loadNow" />
-    </transition>
-  </div>
+    <landing-page></landing-page>
 </template>
 
 <script>
@@ -30,10 +17,10 @@ export default {
   },
 
   components: {
-    HelloWorld: () => import('@/components/HelloWorld.vue'),
+    LandingPage: () => import('@/components/LandingPage.vue'),
   },
 };
 </script>
 <style scoped>
-@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
+
 </style>
