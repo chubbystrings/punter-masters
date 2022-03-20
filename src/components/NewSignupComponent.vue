@@ -200,7 +200,7 @@ export default {
   mounted() {
     this.tween = gsap.timeline();
     this.tween.from(this.$refs.containerWrap, {
-      delay: 2,
+      delay: 0.5,
     })
       .from(this.$refs.cardWrapper, {
         opacity: 0,

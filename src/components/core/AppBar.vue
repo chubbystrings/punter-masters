@@ -17,17 +17,6 @@
       @click="goHome"
       >Punter Masters
       </span>
-      <v-text-field
-      v-if="auth"
-        class="hidden-sm-and-down"
-        solo-inverted
-        dense
-        flat
-        rounded
-        hide-details
-        label="Search"
-        append-icon="mdi-magnify"
-      ></v-text-field>
 
       <v-spacer></v-spacer>
       <span v-if="auth" class="pa-1 text-color">
@@ -123,11 +112,11 @@ export default {
 
   methods: {
     drawerToggle() {
-      this.$store.commit('TOGGLE_DRAWER');
+      this.$store.commit('TOGGLE_DRAWER', true);
     },
 
     drawerRightToggle() {
-      this.$store.commit('TOGGLE_RIGHT_DRAWER');
+      this.$store.commit('TOGGLE_RIGHT_DRAWER', true);
     },
 
     logout() {

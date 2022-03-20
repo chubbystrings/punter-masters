@@ -1,7 +1,9 @@
 <template>
-<div >
+<transition name="fade" mode="out-in" appear>
+
+<div>
     <v-card
-    style="width: 80vw"
+    style=""
     class=""
     color="transparent"
     flat
@@ -27,11 +29,16 @@
   </v-container>
   </v-card>
 </div>
+</transition>
 </template>
 <script>
 import { mapState } from 'vuex';
+// import { gsap } from 'gsap';
 
 export default {
+  data: () => ({
+    tween: null,
+  }),
   components: {
     Banner: () => import('./Banner.vue'),
     codeSharers: () => import('./codeSharers.vue'),
@@ -42,7 +49,30 @@ export default {
     togglePost() {
       this.$store.commit('TOGGLE_POST_DIALOG');
     },
+
+    beforeEnter() {
+      console.log('enter');
+    },
+
+    enter(e) {
+      console.log(e);
+    },
   },
+
+  mounted() {
+    // this.tween = gsap.from(
+    //   this.$refs.homeView,
+    //   {
+    //     opacity: 0,
+    //     delay: 1.5,
+    //     duration: 1,
+    //   },
+    // );
+  },
+
+  // beforeDestroy() {
+  //   this.tween.kill();
+  // },
 
   computed: {
     ...mapState(['posts']),
@@ -54,7 +84,22 @@ export default {
 };
 </script>
 <style scoped>
-div {
+/* div {
   transition: all .3s ease-out;
+} */
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all 1.5s ease;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
 }
 </style>

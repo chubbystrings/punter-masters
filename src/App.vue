@@ -49,41 +49,29 @@ export default {
     }
   },
 
-  updated() {
-    if (window.innerWidth > 1200) {
-      this.$store.commit('OPEN_DRAWERS');
-    }
+  // updated() {
+  //   if (window.innerWidth > 1200) {
+  //     this.$store.commit('OPEN_DRAWERS');
+  //   }
 
-    if (window.innerWidth < 1200) {
-      if (this.$store.state.drawer && this.$store.state.openRightDrawer) {
-        this.$store.commit('CLOSE_DRAWERS');
-      }
-    }
-  },
+  //   if (window.innerWidth < 1200) {
+  //     if (this.$store.state.drawer && this.$store.state.openRightDrawer) {
+  //       this.$store.commit('CLOSE_DRAWERS');
+  //     }
+  //   }
+  // },
 
   mounted() {
+    console.log(this.$store.state.openRightDrawer);
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
-    window.addEventListener('transitionend', this.removeNavDrawer);
+    // window.addEventListener('transitionend', this.removeNavDrawer);
   },
 
   methods: {
     onResize() {
       if (window.innerWidth > 1200) {
         this.$store.commit('OPEN_DRAWERS');
-      }
-    },
-    removeNavDrawer(event) {
-      const ans = event.path
-        .map((f) => f.className)
-        .filter(
-          (n) => n
-              === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile theme--light secondary'
-            || n
-              === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile v-navigation-drawer--right theme--light',
-        );
-      if (ans.length > 0) {
-        this.$store.commit('DRAWER_FALSE');
       }
     },
   },
@@ -108,17 +96,16 @@ export default {
 
 <style>
 /* @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"; */
-#keep .v-navigation-drawer__border {
+/* #keep .v-navigation-drawer__border {
   background-color: #a38d65;
-  /* display: none; */
 }
 .theme--light.v-divider {
   border-color: #a38d65 !important;
-}
+} */
 
-.divBorder {
+/* .divBorder {
   border: 1px solid #a38d65;
-}
+} */
 .no-auth-color {
   /* background-image: url("./assets/images/layered-waves.svg");
   background-repeat: no-repeat;

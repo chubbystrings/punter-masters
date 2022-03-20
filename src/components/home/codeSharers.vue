@@ -3,14 +3,13 @@
     max-width="400"
     class="mx-auto"
     rounded
-    outlined
     height="430"
     :loading="loading"
-    flat
+    elevation="8"
   >
 
     <v-list three-line subheader>
-       <v-subheader class="accent">Code Sharers Today</v-subheader>
+       <v-subheader class="primary accent--text">Code Sharers Today</v-subheader>
       <template v-for="(item, index) in codes">
 
         <v-divider inset :key="index" v-if="index > 0"></v-divider>
@@ -80,9 +79,6 @@ export default {
 };
 </script>
 <style scoped>
-.v-card {
-  border: 1px solid #a38d65;
-}
 .hoverImg:hover {
   cursor: pointer;
 }

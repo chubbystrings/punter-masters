@@ -122,7 +122,7 @@ export default {
     this.tween = gsap.timeline();
 
     this.tween.to(this.$refs.containerWrap, {
-      delay: 1,
+      delay: 0.3,
     })
       .from(
         this.$refs.cardWrapper,

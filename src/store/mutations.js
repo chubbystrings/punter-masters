@@ -39,14 +39,6 @@ export default {
     state.posts = val;
   },
 
-  TOGGLE_DRAWER(state) {
-    state.drawer = !state.drawer;
-  },
-  DRAWER_FALSE(state) {
-    state.drawer = false;
-    state.openRightDrawer = false;
-  },
-
   TOGGLE_SHARE_DIALOG(state) {
     state.shareDialog = !state.shareDialog;
   },
@@ -55,15 +47,23 @@ export default {
     state.postDialog = !state.postDialog;
   },
 
-  TOGGLE_RIGHT_DRAWER(state) {
-    state.openRightDrawer = !state.openRightDrawer;
-  },
+  // TOGGLE_RIGHT_DRAWER(state) {
+  //   state.openRightDrawer = !state.openRightDrawer;
+  // },
   TOGGLE_BANTER_ROOM(state) {
     state.banterRoom = !state.banterRoom;
   },
 
   OPEN_EDIT_DIALOG(state) {
     state.editDialog = !state.editDialog;
+  },
+
+  TOGGLE_DRAWER(state, prop) {
+    state.drawer = prop;
+  },
+  DRAWER_FALSE(state) {
+    state.drawer = false;
+    state.openRightDrawer = false;
   },
 
   CLOSE_DRAWERS(state) {
@@ -74,6 +74,10 @@ export default {
   OPEN_DRAWERS(state) {
     state.drawer = true;
     state.openRightDrawer = true;
+  },
+
+  TOGGLE_RIGHT_DRAWER(state, prop) {
+    state.openRightDrawer = prop;
   },
 
   CLOSE_LEFT_DRAWER(state) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="divBorder">
+  <div class="">
     <base-back  v-if="userProfile" />
     <base-reset />
       <v-card

@@ -3,8 +3,9 @@
       :value="drawer"
       app
       clipped
-      color="secondary"
+      color="background"
       v-if="!currentRoute"
+      @input="trans"
     >
       <v-list dense>
           <v-list-item two-line>
@@ -35,7 +36,7 @@
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item
-        @click="doAction('route', 'Home')"
+        @click="doAction('route', 'Dashboard')"
         >
           <v-list-item-action>
             <v-icon color="primary">mdi-home</v-icon>
@@ -120,7 +121,7 @@
             </v-btn>
         </div>
         <div v-else class="pa-2">
-          <v-btn small class="text-color" color="primary"
+          <v-btn depressed small class="text-color" color="primary"
             @click="doAction('route', 'Login')" block
             >Log In
             </v-btn>
@@ -156,8 +157,8 @@ export default {
           } else {
             this.$router.push({ name: word, params: { id: this.userProfile.userId } });
           }
-        } else if (word === 'Home' && this.auth) {
-          this.$router.push({ name: 'AuthHome' });
+        } else if (word === 'Dashboard' && this.auth) {
+          this.$router.push({ name: 'Dashboard' });
         } else {
           this.$router.push({ name: word });
         }
@@ -174,6 +175,11 @@ export default {
 
     toggleDialog() {
       this.$store.commit('TOGGLE_SHARE_DIALOG');
+    },
+
+    trans(e) {
+      console.log(e);
+      this.$store.commit('TOGGLE_DRAWER', e);
     },
   },
 };
