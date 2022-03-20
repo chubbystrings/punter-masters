@@ -135,7 +135,7 @@ export default {
   padding: 20px 60px;
   border-radius: 10px;
   z-index: 100000;
-  margin-top: 20px;
+  margin-top: 30px;
   background: #fafafa;
 }
 
@@ -177,13 +177,13 @@ export default {
   place-items: center;
 }
 
-.vector-wrapper::before {
+/* .vector-wrapper::before {
   content: '';
   width: 230px;
   height: 230px;
   border: 10px solid #8E6BBF;
   position: absolute;
-}
+} */
 
 .vector-wrapper img {
   width: 100%;

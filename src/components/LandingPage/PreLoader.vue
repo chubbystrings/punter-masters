@@ -1,7 +1,9 @@
 <template>
 <div class="preloader--wrapper" :style="{ display: animation}" ref="preloaderWrap">
 
-  <div class="preloader" ref="preloader"></div>
+  <div class="preloader" ref="preloader">
+    <img src="../../assets/images/football.svg" />
+  </div>
 </div>
 </template>
 
@@ -70,15 +72,17 @@ export default {
 }
 .preloader {
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
+  width: 300px;
+  height: 300px;
   margin: 0 auto;
-  background: #8E6BBF;
   position: absolute;
   left: 0;
   right: 0;
   top: 150px;
-  perspective: 10000;
-   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+.preloader img{
+  width: 100%;
+  height: 100%;
 }
 </style>

@@ -1,30 +1,28 @@
 <template>
-  <section class="section-two" ref="sectionTwo">
-    <div class="section-wrapper" ref="wrapperTwo">
-      <base-square
-        :styles="{ top: '50px', left: '-10px', background: '#8E6BBF' }"
-        ref="parentRefTwo"
+   <section class="section-five">
+     <div class="section-wrapper" ref="wrapperFive">
+      <base-square :styles="{ top: '-25px', right: '45px', background: '#8E6BBF' }"
+      ref="parentRefFive"
       ></base-square>
-      <div class="content-side" ref="contentTwo">
+      <div class="vector-wrapper" ref="imgRefFive">
+        <img src="../../assets/images/Saly-13.svg" />
+      </div>
+       <div class="content-side" ref="contentFive">
         <div class="animOne primary--text">
-          <h2>Get Bet Codes</h2>
+          <h2>Banter Room</h2>
           <p>
-            Get the best and latest bet codes from fellow masters. Rate their code according to it's
-            win rate.
+            Join your favorite rooms, chat and banter with other masters, let the banter begin!
           </p>
         </div>
         <div class="animOne">
-          <v-btn :small="$vuetify.breakpoint.xs" to="/signup"
-           class="white--text" color="button" depressed>
-            Join The Masters
+          <v-btn :small="$vuetify.breakpoint.xs" to="/signup" color="button"
+           class="white--text" depressed>
+            Join To Share
           </v-btn>
         </div>
       </div>
-      <div class="vector-wrapper" ref="imgRefTwo">
-        <img src="../../assets/images/Saly-2.svg" />
-      </div>
-    </div>
-  </section>
+     </div>
+    </section>
 </template>
 
 <script>
@@ -37,33 +35,31 @@ export default {
   }),
   mounted() {
     gsap.registerPlugin(ScrollTrigger);
-    const contentTwo = gsap.utils.selector(this.$refs.contentTwo);
+    const contentFive = gsap.utils.selector(this.$refs.contentFive);
     this.tween = gsap.timeline({
       scrollTrigger: {
-        trigger: this.$refs.contentTwo,
+        trigger: this.$refs.contentFive,
         start: 'top center',
         end: 'top 200px',
         scrub: 3,
       },
     });
-    this.tween
-      .from(this.$refs.parentRefTwo.$refs.baseEl, {
-        opacity: 0,
-        x: -50,
-        duration: 1,
-        ease: 'none',
-      })
-      // .to(this.$refs.wrapperTwo, {
+    this.tween.from(this.$refs.parentRefFive.$refs.baseEl, {
+      opacity: 0,
+      y: 100,
+      ease: 'none',
+
+    })
+      // .to(this.$refs.wrapperFive, {
       //   backgroundColor: '#fafafa',
       //   boxShadow: 'rgba(17, 12, 46, 0.15) 0px 48px 100px 0px',
       // })
-      .from(contentTwo('.animOne'), {
+      .from(contentFive('.animOne'), {
         opacity: 0,
         y: 30,
         stagger: 0.2,
         ease: 'none',
-      })
-      .from(this.$refs.imgRefTwo, {
+      }).from(this.$refs.imgRefFive, {
         opacity: 0,
         y: 30,
         ease: 'none',
@@ -77,8 +73,9 @@ export default {
 </script>
 
 <style scoped>
-.section-two .section-wrapper {
-  display: grid;
+
+.section-five .section-wrapper {
+ display: grid;
   grid-template-columns: 1fr 1fr;
   transition: all 0.5s ease;
   position: relative;
@@ -86,12 +83,28 @@ export default {
   box-sizing: border-box;
   padding: 20px 60px;
   border-radius: 10px;
-  margin-top: 20px;
+  background: #fafafa;
 
 }
 
+/* .section-five .section-wrapper::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  width: 100%;
+  height: 3px;
+  border-radius: 5px;
+  background: #EDE9F2;
+  z-index: inherit;
+} */
+
+.animOne h2 {
+  font-weight: 900;
+  font-size: 50px;
+}
+
 .content-side {
-  display: flex;
+   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -100,21 +113,17 @@ export default {
   gap: 50px;
 }
 
-.animOne h2 {
-  font-weight: 900;
-  font-size: 50px;
-}
-
 .content-side > div {
   width: 100%;
 }
 
-.section-two {
+.section-five {
   position: relative;
   box-sizing: border-box;
   padding: 20px 60px;
   height: 100vh;
 }
+
 .vector-wrapper {
   width: 100%;
   display: grid;
@@ -122,10 +131,10 @@ export default {
 }
 
 /* .vector-wrapper::before {
-  content: "";
+  content: '';
   width: 230px;
   height: 230px;
-  border: 10px solid #8e6bbf;
+  border: 10px solid #8E6BBF;
   position: absolute;
 } */
 
@@ -133,13 +142,11 @@ export default {
   width: 100%;
   position: relative;
 }
-
 @media screen and (max-width: 970px) {
-  .section-two .section-wrapper {
+  .section-five .section-wrapper {
     height: 100%;
     grid-template-columns: 1fr;
     place-items: center;
-    padding: 100px 5px;
   }
   .animOne h2 {
     font-size: 15px;
@@ -156,25 +163,24 @@ export default {
   .vector-wrapper {
     width: 350px;
     height: 300px;
+    order: 2;
   }
 }
 
 @media screen and (max-width: 575px) {
-  .section-two .section-wrapper {
+  .section-five .section-wrapper {
     padding: 20px;
   }
-  .section-two {
+  .section-five {
     padding: 50px 20px;
   }
   .animOne p  {
     max-width: 150px;
   }
 }
-
 @media screen and (max-width: 395px) {
-  .section-two .section-wrapper {
+  .section-five .section-wrapper {
     padding: 2px;
-    grid-auto-rows: 1fr 3fr;
   }
 
    .vector-wrapper::before {
