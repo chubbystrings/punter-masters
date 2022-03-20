@@ -1,193 +1,169 @@
 <template>
-  <div
-  :class="paginatedSharedCodes.length > 0 ? '': ''"
-  class=""
-  >
-  <base-back  v-if="paginatedSharedCodes.length > 0" />
+  <div :class="paginatedSharedCodes.length > 0 ? '' : ''" class="timeline-wrapper">
+    <base-back v-if="paginatedSharedCodes.length > 0" />
     <transition-group
-    mode="out-in"
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
+      mode="out-in"
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
     >
-    <v-timeline key="timeline" dense v-if="paginatedSharedCodes.length > 0"
-      class="pa-0"
-    >
-      <v-timeline-item
-      fill-dot
-        v-for="(code, i) in paginatedSharedCodes"
-        :key="code.id"
-        :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
-        class="pa-0 mb-2 "
-        small
-      >
+      <v-timeline key="timeline" dense v-if="paginatedSharedCodes.length > 0" class="pa-0">
+        <v-timeline-item
+          fill-dot
+          v-for="(code, i) in paginatedSharedCodes"
+          :key="code.id"
+          class="pa-0 mb-2 "
+          small
+        >
 
-        <v-card class="mx-n5"
-        rounded
-        max-height="200"
-         flat
-         :key="i"
-         color="secondary"
-         shaped
-         style="width: 95vw;"
-         >
-          <v-card-title class="pa-0 pl-2">
-            <v-btn
-            class="pa-0"
-             text
-              @click="openUser(code)">{{code.sharerName }}</v-btn>
-            <small class="caption pl-1 text-color"  style="color: blue;">
-              shared {{ code.createdOn | formatDate}}
-            </small>
-            </v-card-title>
-          <v-card-text class="pa-0 pl-2 font-weight-bold">
-            {{code.code | upperCase }}
-            <small>({{ code.forum }})</small>
-          </v-card-text>
-          <v-card-actions class="pa-0 pr-2">
-            <v-btn
-              @click.stop="rateCodeSelected(code, i)"
-              text
-              small
-              class="caption"
-              color="primary"
-              :disabled="code.userId === userProfile.userId"
+          <template v-slot:icon>
+              <router-link :to="{ name: 'Profile', params: { id: code.userId} }">
+            <v-avatar size="30">
+                <img :src="code.userAvatar ? code.userAvatar : 'primary'" />
+            </v-avatar>
+              </router-link>
+          </template>
+          <v-hover v-slot="{ hover }" open-delay="200">
+            <v-card
+              class="mx-n5 code-card"
+              rounded
+              max-height="200"
+              flat
+              :key="i"
+              color="#fff"
+              shaped
+              :elevation="hover ? 4 : 0"
             >
-             rate code
-            </v-btn>
-             <v-btn
-             v-if="code.userId === userProfile.userId"
-              @click.stop="codeToDelete(code, i)"
-              text
-              small
-              class="caption text-lowercase"
-              color="primary"
-            >
-             Delete
-            </v-btn>
-            <v-spacer></v-spacer>
-             <v-rating
-                :value="code.averageRatings"
-                background-color="primary"
-                color="yellow"
-                small
-                dense
-                class="mr-2"
-                readonly
-                half-increments
-              ></v-rating>
-              <span class="mr-1 hidden-sm-and-down">
+              <v-card-title class="pa-0 pl-2">
+                <v-btn class="pa-0" text @click="openUser(code)">{{ code.sharerName }}</v-btn>
+                <small class="caption pl-1 text-color" style="color: blue;">
+                  shared {{ code.createdOn | formatDate }}
+                </small>
+              </v-card-title>
+              <v-card-text class="pa-0 pl-2 font-weight-bold">
+                {{ code.code | upperCase }}
+                <small>({{ code.forum }})</small>
+              </v-card-text>
+              <v-card-actions class="pa-0 pr-2">
                 <v-btn
-                :disabled="code.userId === userProfile.userId"
-                icon
-                @click.prevent="thumbsUp(code, i)"
+                  @click.stop="rateCodeSelected(code, i)"
+                  text
+                  x-small
+                  class="caption"
+                  color="primary"
+                  :disabled="code.userId === userProfile.userId"
                 >
-                  <v-icon
-                  class="mr-1"
-                  >mdi-thumb-up-outline
-                  </v-icon>
+                  rate code
                 </v-btn>
-                {{ code.thumbsUp}}
-              </span>
-              <span class="mr-1 hidden-sm-and-down">
                 <v-btn
-                :disabled="code.userId === userProfile.userId"
-                 icon
-                @click.prevent="thumbsDown(code, i)"
+                  v-if="code.userId === userProfile.userId"
+                  @click.stop="codeToDelete(code, i)"
+                  text
+                  small
+                  class="caption text-lowercase delete-btn"
+                  color="primary"
                 >
-                  <v-icon
-                  class="mr-1"
-                  >mdi-thumb-down-outline
-                  </v-icon>
+                  Delete
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-rating
+                  :value="code.averageRatings"
+                  background-color="primary"
+                  color="yellow"
+                  x-small
+                  dense
+                  class="mr-2"
+                  readonly
+                  half-increments
+                ></v-rating>
+                <span class="mr-1 hidden-sm-and-down">
+                  <v-btn
+                    :disabled="code.userId === userProfile.userId"
+                    icon
+                    small
+                    @click.prevent="thumbsUp(code, i)"
+                  >
+                    <v-icon small class="mr-1">mdi-thumb-up-outline </v-icon>
+                  </v-btn>
+                  {{ code.thumbsUp }}
+                </span>
+                <span class="mr-1 hidden-sm-and-down">
+                  <v-btn
+                    :disabled="code.userId === userProfile.userId"
+                    icon
+                    small
+                    @click.prevent="thumbsDown(code, i)"
+                  >
+                    <v-icon small class="mr-1">mdi-thumb-down-outline </v-icon>
+                  </v-btn>
+                  {{ code.thumbsDown }}
+                </span>
+              </v-card-actions>
+              <span class="mr-1 hidden-md-and-up">
+                <v-btn
+                  :disabled="code.userId === userProfile.userId"
+                  @click.prevent="thumbsUp(code, i)"
+                  icon
+                >
+                  <v-icon class="ml-2">mdi-thumb-up-outline </v-icon>
+                </v-btn>
+                {{ code.thumbsUp }}
+              </span>
+              <span class="ml-2 hidden-md-and-up">
+                <v-btn
+                  :disabled="code.userId === userProfile.userId"
+                  icon
+                  @click="thumbsDown(code, i)"
+                >
+                  <v-icon class="mr-1">mdi-thumb-down-outline </v-icon>
                 </v-btn>
                 {{ code.thumbsDown }}
               </span>
-          </v-card-actions>
-          <span class="mr-1 hidden-md-and-up">
-            <v-btn
-            :disabled="code.userId === userProfile.userId"
-            @click.prevent="thumbsUp(code, i)"
-             icon
-             >
-            <v-icon
-            class="ml-2"
-            >mdi-thumb-up-outline
-            </v-icon>
-            </v-btn>
-            {{ code.thumbsUp }}
-          </span>
-          <span class="ml-2 hidden-md-and-up">
-            <v-btn
-            :disabled="code.userId === userProfile.userId"
-            icon
-            @click="thumbsDown(code, i)"
-            >
-            <v-icon
-            class="mr-1"
-            >mdi-thumb-down-outline
-            </v-icon>
-            </v-btn>
-            {{code.thumbsDown}}
-          </span>
-        </v-card>
-      </v-timeline-item>
-    </v-timeline>
-    <v-pagination
-    v-if="codes.length > 0"
-    key="pagination"
-      v-model="page"
-      :length="pages"
-      circle
-      class="pagination--view "
-    ></v-pagination>
+            </v-card>
+          </v-hover>
+        </v-timeline-item>
+      </v-timeline>
+      <v-pagination
+        v-if="codes.length > 0"
+        key="pagination"
+        v-model="page"
+        :length="pages"
+        circle
+        class="pagination--view "
+      ></v-pagination>
     </transition-group>
     <v-row justify="center">
-    <v-dialog v-model="ratingDialog" persistent max-width="290">
-  <v-card
-    class="elevation-16 mx-auto"
-    width="300"
-  >
-    <v-card-title class="headline">
-      Rate This code
-    </v-card-title>
-    <v-card-text>
-       How did this code perform?
-      <div class="text-center mt-12">
-        <v-rating
-          v-model="rating"
-          color="yellow darken-3"
-          background-color="grey darken-1"
-          empty-icon="$ratingFull"
-          half-increments
-          hover
-        ></v-rating>
-      </div>
-    </v-card-text>
-    <v-divider></v-divider>
-    <v-card-actions class="justify-space-between">
-      <v-btn
-      @click="cancel"
-       text
-       >No Thanks
-       </v-btn>
-      <v-btn
-        color="primary"
-        text
-        @click="ok"
-      >
-        Rate Now
-      </v-btn>
-    </v-card-actions>
-  </v-card>
-  </v-dialog>
-  </v-row>
-  <p
-  style="width: 50vw; text-align: center"
-  v-if="paginatedSharedCodes.length <= 0"
-  class="display-1"
-  >
-  No codes yet
-  </p>
-  <base-dialog @delete="deleteCode" />
+      <v-dialog v-model="ratingDialog" persistent max-width="290">
+        <v-card class="elevation-16 mx-auto" width="300">
+          <v-card-title class="headline">
+            Rate This code
+          </v-card-title>
+          <v-card-text>
+            How did this code perform?
+            <div class="text-center mt-12">
+              <v-rating
+                v-model="rating"
+                color="yellow darken-3"
+                background-color="grey darken-1"
+                empty-icon="$ratingFull"
+                half-increments
+                hover
+              ></v-rating>
+            </div>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions class="justify-space-between">
+            <v-btn @click="cancel" text>No Thanks </v-btn>
+            <v-btn color="primary" text @click="ok">
+              Rate Now
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-row>
+    <p v-if="paginatedSharedCodes.length <= 0" class="display-1 no-codes">
+      No codes yet
+    </p>
+    <base-dialog @delete="deleteCode" />
   </div>
 </template>
 <script>
@@ -211,9 +187,7 @@ export default {
   computed: {
     ...mapState(['sharedCodes', 'userProfile']),
     pages() {
-      return (
-        this.codes.length > 5
-          ? Math.ceil(this.codes.length / 5) : 1);
+      return this.codes.length > 5 ? Math.ceil(this.codes.length / 5) : 1;
     },
     paginatedSharedCodes() {
       const start = (this.page - 1) * 5;
@@ -223,14 +197,18 @@ export default {
   },
   filters: {
     formatDate(val) {
-      if (!val) { return '-'; }
+      if (!val) {
+        return '-';
+      }
       if (val.seconds) {
         return moment(Date.parse(val.toDate())).fromNow();
       }
       return moment(Date.parse(val)).fromNow();
     },
     trimLength(val) {
-      if (val.length < 200) { return val; }
+      if (val.length < 200) {
+        return val;
+      }
       return `${val.substring(0, 200)}...`;
     },
     lowerCase(val) {
@@ -379,10 +357,43 @@ export default {
 </script>
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
-.v-pagination__item, .v-pagination__navigation {
+.v-pagination__item,
+.v-pagination__navigation {
   outline: none !important;
 }
+.timeline-wrapper {
+  box-sizing: border-box;
+  padding-bottom: 50px;
+}
+.code-card {
+  position: relative;
+}
 div {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
+}
+
+.delete-btn {
+  position: absolute;
+  bottom: 2px;
+  right: 10px;
+}
+.no-codes {
+  position: absolute;
+  left: 50%;
+  top: 20%;
+  transform: translateX(-50%);
+}
+@media screen and (min-width: 958px) {
+  .delete-btn {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+  }
+}
+@media screen and (max-width: 375px) {
+  .timeline-wrapper *,
+  button {
+    font-size: 10px !important;
+  }
 }
 </style>

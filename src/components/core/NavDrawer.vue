@@ -178,7 +178,6 @@ export default {
     },
 
     trans(e) {
-      console.log(e);
       this.$store.commit('TOGGLE_DRAWER', e);
     },
   },

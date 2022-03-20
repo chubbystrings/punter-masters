@@ -1,69 +1,13 @@
 <template>
-<div>
-  <base-card
+<div class="post-card-wrapper">
+  <post-card
   v-for="item in paginatedPosts"
   :key="item.id"
-  @click="openPost(item.id, item.forum)"
   class="hover"
+  :item="item"
   >
-  <header>
-    <div>
-      <v-avatar size="32" class="mr-3">
-        <v-img :src="item.userAvatar"></v-img>
-      </v-avatar>
-      <span>{{ item.title }}</span>
-    </div>
-    <div>
-      <v-icon color="primary">mdi-comment-outline</v-icon><span>{{ item.comments}}</span>
-      <v-icon color="primary">mdi-heart-outline</v-icon><span>{{ item.likes}}</span>
-    </div>
-  </header>
-  <small class="primary--text">
-    posted by {{item.name }} posted {{item.createdOn | formatDate}}
-  </small>
-  <p>{{ item.content | trimLength }}</p>
-  </base-card>
-    <!-- <v-list three-line v-for="(item) in paginatedPosts" :key="item.id">
-        <v-divider
-          :key="item.content"
-          class="pt-0"
-        ></v-divider>
-        <v-list-item
-        class="hover"
-          :key="item.title"
-          @click="openPost(item.id, item.forum)"
-        >
-          <v-list-item-avatar>
-            <v-img :src="item.userAvatar"></v-img>
-          </v-list-item-avatar>
-
-          <v-list-item-content>
-            <small
-             class="caption primary--text"
-             >{{item.name }} posted {{item.createdOn | formatDate}}</small>
-            <v-list-item-title >{{ item.title | upperCase}}</v-list-item-title>
-            <v-list-item-subtitle>{{item.content}}</v-list-item-subtitle>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-badge
-            inline
-            class="mt-4 mr-2"
-            :content="`${item.comments}`"
-            >
-              <small class="primary--text text--bold">comments</small>
-            </v-badge>
-            <v-badge
-            inline
-            class="mt-5 mr-2"
-            :content="`${item.likes}`"
-            >
-              <small class="primary--text text--bold">likes</small>
-            </v-badge>
-          </v-list-item-action>
-        </v-list-item>
-    </v-list> -->
-    <v-divider></v-divider>
-     <div v-if="posts.length > 0" class="text-center">
+  </post-card>
+     <div v-if="posts.length > 0" class="text-center paginate-wrapper">
     <v-pagination
       v-model="page"
       :length="pages"
@@ -75,6 +19,7 @@
 <script>
 import moment from 'moment';
 import { mapState } from 'vuex';
+import PostCard from './core/PostCard.vue';
 
 export default {
   data: () => ({
@@ -82,6 +27,9 @@ export default {
     pagination: {},
     page: 1,
   }),
+  components: {
+    PostCard,
+  },
 
   beforeUpdate() {
     this.$store.commit('OVERLAY_ON', '');
@@ -140,9 +88,7 @@ export default {
   // },
 
   methods: {
-    openPost(post, forum) {
-      this.$router.push({ name: 'ViewPost', params: { id: post, forum } });
-    },
+    //
   },
 
   created() {
@@ -154,16 +100,8 @@ export default {
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
 
-.hover:hover {
-    background-color: #FCE4EC;
-    cursor: pointer;
-}
 .v-pagination__item, .v-pagination__navigation {
   outline: none !important;
-}
-
-div {
-  transition: all .3s ease-out;
 }
 
  li {
@@ -191,9 +129,17 @@ a {
   color: #ce5c00;
 }
 
-a:hover,
-a:active {
-  color: #c89300;
+.post-card-wrapper {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  height: 75vh;
+}
+.paginate-wrapper {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%)
 }
 
 </style>
