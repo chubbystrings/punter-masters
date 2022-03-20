@@ -62,7 +62,6 @@ export default {
   // },
 
   mounted() {
-    console.log(this.$store.state.openRightDrawer);
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
     // window.addEventListener('transitionend', this.removeNavDrawer);
