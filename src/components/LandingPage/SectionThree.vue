@@ -73,7 +73,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 
 .section-three .section-wrapper {
  display: grid;
@@ -131,13 +131,13 @@ export default {
   place-items: center;
 }
 
-.vector-wrapper::before {
+/* .vector-wrapper::before {
   content: '';
   width: 230px;
   height: 230px;
   border: 10px solid #8E6BBF;
   position: absolute;
-}
+} */
 
 .vector-wrapper img {
   width: 100%;

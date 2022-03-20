@@ -5,6 +5,7 @@
       <section-one></section-one>
       <section-two></section-two>
       <section-three></section-three>
+      <section-four></section-four>
     </div>
     <Footer />
   </div>
@@ -15,6 +16,7 @@ import { gsap } from 'gsap';
 import SectionOne from './SectionOne.vue';
 import SectionTwo from './SectionTwo.vue';
 import SectionThree from './SectionThree.vue';
+import SectionFour from './SectionFour.vue';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
 
@@ -27,6 +29,7 @@ export default {
     SectionOne,
     SectionTwo,
     SectionThree,
+    SectionFour,
     Header,
     Footer,
   },
