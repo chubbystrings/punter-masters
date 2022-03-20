@@ -6,6 +6,7 @@
       <section-two></section-two>
       <section-three></section-three>
       <section-four></section-four>
+      <section-five></section-five>
     </div>
     <Footer />
   </div>
@@ -17,6 +18,7 @@ import SectionOne from './SectionOne.vue';
 import SectionTwo from './SectionTwo.vue';
 import SectionThree from './SectionThree.vue';
 import SectionFour from './SectionFour.vue';
+import SectionFive from './SectionFive.vue';
 import Header from './Header.vue';
 import Footer from './Footer.vue';
 
@@ -30,6 +32,7 @@ export default {
     SectionTwo,
     SectionThree,
     SectionFour,
+    SectionFive,
     Header,
     Footer,
   },
