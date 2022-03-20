@@ -1,7 +1,5 @@
 <template>
-  <div >
     <deposit />
-  </div>
 </template>
 
 <script>

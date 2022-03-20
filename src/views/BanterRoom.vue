@@ -1,7 +1,7 @@
 <template>
-  <div >
+
     <banter-room />
-  </div>
+
 </template>
 
 <script>

@@ -1,7 +1,5 @@
 <template>
-  <div >
     <code-room />
-  </div>
 </template>
 
 <script>

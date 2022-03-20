@@ -1,10 +1,11 @@
 <template>
     <v-navigation-drawer
       app
-      clipped
       right
+      clipped
       :value="openRightDrawer"
-      color=""
+      @input="trans"
+      color="background"
       v-if="!currentRoute && auth"
     >
       <v-list dense>
@@ -36,7 +37,7 @@ import { mapState } from 'vuex';
 
 export default {
   data: () => ({
-    rightDrawer: true,
+    rightDrawer: false,
   }),
   computed: {
     ...mapState(['userProfile', 'openRightDrawer', 'forums']),
@@ -53,18 +54,20 @@ export default {
     },
   },
 
+  mounted() {
+    this.rightDrawer = this.openRightDrawer;
+  },
+
   methods: {
     routesPush(route, id) {
       if (this.forumName !== route || this.$route.name !== 'Forum') {
         this.$router.push({ name: 'Forum', params: { forum: route, id } });
       }
     },
+    trans(e) {
+      this.$store.commit('TOGGLE_RIGHT_DRAWER', e);
+    },
   },
-
-  // watch: {
-  //   // eslint-disable-next-line quote-props
-  //   '$route': 'fetchData',
-  // },
 };
 </script>
 <style scoped>

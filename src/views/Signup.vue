@@ -1,7 +1,5 @@
 <template>
-  <div class="">
-    <signup />
-  </div>
+  <signup />
 </template>
 
 <script>
@@ -23,3 +21,4 @@ export default {
   },
 };
 </script>
+<style scoped></style>

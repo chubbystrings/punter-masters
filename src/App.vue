@@ -1,35 +1,18 @@
 <template>
-  <v-app id="keep">
+  <v-app class="app-background">
     <base-alert />
     <base-overlay />
-    <nav-drawer />
-    <right-drawer />
-    <app-bar />
-    <v-main
-    class="pt-11"
-    :class=" homeBackground ? 'backGcolor': 'no-auth-color'"
-    >
-      <v-container
-        fluid
-      >
-        <v-row
-          justify="center"
-          align="center"
-        >
-          <v-col :class="homeRoute ? '' : 'shrink'"
-          >
-            <transition mode="out-in"
-              name="route"
-              appear
-              >
-              <router-view />
-            </transition>
-          </v-col>
-        </v-row>
+    <v-main>
+      <v-container fluid>
+        <div class="main--container">
+          <transition mode="out-in" name="route" appear>
+            <router-view />
+          </transition>
+          <share-dialog />
+          <notification />
+        </div>
       </v-container>
-      <share-dialog />
     </v-main>
-    <notification />
   </v-app>
 </template>
 
@@ -40,13 +23,9 @@ export default {
   props: {
     source: String,
   },
-  data: () => ({
-  }),
+  data: () => ({}),
 
   components: {
-    AppBar: () => import('@/components/core/AppBar'),
-    NavDrawer: () => import('@/components/core/NavDrawer'),
-    rightDrawer: () => import('@/components/core/RightDrawer.vue'),
     shareDialog: () => import('@/components/core/ShareDialog.vue'),
     notification: () => import('@/components/core/Notification.vue'),
   },
@@ -70,36 +49,29 @@ export default {
     }
   },
 
-  updated() {
-    if (window.innerWidth > 1200) {
-      this.$store.commit('OPEN_DRAWERS');
-    }
+  // updated() {
+  //   if (window.innerWidth > 1200) {
+  //     this.$store.commit('OPEN_DRAWERS');
+  //   }
 
-    if (window.innerWidth < 1200) {
-      if (this.$store.state.drawer && this.$store.state.openRightDrawer) {
-        this.$store.commit('CLOSE_DRAWERS');
-      }
-    }
-  },
+  //   if (window.innerWidth < 1200) {
+  //     if (this.$store.state.drawer && this.$store.state.openRightDrawer) {
+  //       this.$store.commit('CLOSE_DRAWERS');
+  //     }
+  //   }
+  // },
 
   mounted() {
+    console.log(this.$store.state.openRightDrawer);
     this.onResize();
     window.addEventListener('resize', this.onResize, { passive: true });
-    window.addEventListener('transitionend', this.removeNavDrawer);
+    // window.addEventListener('transitionend', this.removeNavDrawer);
   },
 
   methods: {
     onResize() {
       if (window.innerWidth > 1200) {
         this.$store.commit('OPEN_DRAWERS');
-      }
-    },
-    removeNavDrawer(event) {
-      const ans = event.path.map((f) => f.className)
-        .filter((n) => n === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile theme--light secondary'
-        || n === 'v-navigation-drawer v-navigation-drawer--clipped v-navigation-drawer--close v-navigation-drawer--fixed v-navigation-drawer--is-mobile v-navigation-drawer--right theme--light');
-      if (ans.length > 0) {
-        this.$store.commit('DRAWER_FALSE');
       }
     },
   },
@@ -113,8 +85,10 @@ export default {
       return this.$route.name === 'Home';
     },
 
-    homeBackground() {
-      return this.$route.name === 'Home';
+    noAuthBackground() {
+      return this.$route.name === 'Login' || this.$route.name === 'Signup'
+        ? 'main--container no-auth-color'
+        : 'main--container';
     },
   },
 };
@@ -122,28 +96,28 @@ export default {
 
 <style>
 /* @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css"; */
-#keep .v-navigation-drawer__border {
+/* #keep .v-navigation-drawer__border {
   background-color: #a38d65;
-  /* display: none; */
 }
 .theme--light.v-divider {
-    border-color: #a38d65 !important;
-}
+  border-color: #a38d65 !important;
+} */
 
-.divBorder {
+/* .divBorder {
   border: 1px solid #a38d65;
-}
+} */
 .no-auth-color {
-  background-image: url('./assets/circle-scatter.svg');
+  /* background-image: url("./assets/images/layered-waves.svg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-origin: border-box;
+  background-origin: border-box; */
+  background-color: #ede9f2;
 }
 .backGcolor {
-  background-color: #AD1457;
+  background-color: #ad1457;
 }
-.text-color{
+.text-color {
   color: #a38d65 !important;
 }
 .pagination--view {
@@ -157,6 +131,12 @@ button {
   outline: none !important;
 }
 
+.main--container {
+  margin: 0;
+  padding: 0;
+  background-color: #ede9f2;
+}
+
 .route-enter-from,
 .route-leave-to {
   opacity: 0;
@@ -164,11 +144,27 @@ button {
 
 .route-enter-active,
 .route-leave-active {
-  transition: all 0.3s ease-out;
+  transition: all 1.5s ease;
 }
 
 .route-enter-to,
 .route-leave-from {
   opacity: 1;
+}
+
+.app-background {
+  background: #ede9f2 !important;
+}
+.container {
+  padding: 0 !important;
+}
+
+@media screen and (max-width: 395px) {
+  .v-application--wrap {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    width: 100% !important;
+  }
 }
 </style>

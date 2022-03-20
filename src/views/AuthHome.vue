@@ -1,7 +1,7 @@
 <template>
-  <div >
+
     <auth-home />
-  </div>
+
 </template>
 
 <script>

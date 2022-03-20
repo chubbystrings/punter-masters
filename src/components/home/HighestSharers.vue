@@ -4,12 +4,11 @@
     class="mx-auto"
     height="430"
     rounded
-    outlined
-    flat
     :loading="loading"
+    elevation="8"
   >
     <v-list subheader three-line>
-      <v-subheader class="accent">Top Code Sharers</v-subheader>
+      <v-subheader class="primary accent--text">Top Code Sharers</v-subheader>
 
       <v-list-item
         v-for="item in users"
@@ -104,7 +103,4 @@ export default {
 };
 </script>
 <style scoped>
-.v-card {
-    border: 1px solid #a38d65;
-}
 </style>

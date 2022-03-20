@@ -1,5 +1,5 @@
 <template>
-<div class="divBorder">
+<div class="">
   <base-back  v-if="posts" />
     <v-card
     style="width: 95vw"

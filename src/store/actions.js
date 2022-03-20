@@ -113,7 +113,7 @@ export default {
 
     // change route to dashboard
     if (router.currentRoute.path === '/login') {
-      router.push('/home');
+      router.push('/auth');
     }
   },
 

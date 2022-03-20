@@ -1,15 +1,23 @@
 <template>
-  <v-container>
-    <v-card :loading="loading" class="mx-auto login-card" elevation="8">
-      <v-img height="150" src="../assets/umbrella.jpg"></v-img>
+  <div class="container--wrapper" ref="containerWrap">
+    <div ref="cardWrapper">
+      <v-card class="login-card" elevation="8">
+        <div class="home--icon">
+          <v-btn rounded depressed outlined to="/">
+          Home
+          </v-btn>
+        </div>
+     <div class="img-res">
+          <img  src="../assets/images/Saly-2.svg" />
+        </div>
 
-      <v-card-title class="text-color">
+      <v-card-title class="primary--text">
         Sign Up
         <small class="user-text">
           have an account?
-          <router-link class="text-color" to="/login">Login</router-link>
+          <router-link class="primary--text" to="/login">Login</router-link>
         </small>
-        </v-card-title>
+      </v-card-title>
 
       <v-form @submit.prevent="">
         <v-card-text>
@@ -25,6 +33,7 @@
                 flat
                 @input="$v.firstName.$touch()"
                 @blur="$v.firstName.$touch()"
+                color="primary"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -38,6 +47,7 @@
                 @blur="$v.lastName.$touch()"
                 outlined
                 flat
+                color="primary"
               ></v-text-field>
             </v-col>
             <v-col cols="12">
@@ -51,6 +61,7 @@
                 name="email"
                 type="email"
                 required
+                color="primary"
                 @blur="$v.email.$touch()"
               ></v-text-field>
             </v-col>
@@ -65,6 +76,7 @@
                 id="password"
                 name="password"
                 type="password"
+                color="primary"
                 @blur="$v.email.$touch()"
                 :disabled="!$v.email.email || !email"
               ></v-text-field>
@@ -78,6 +90,7 @@
                 label="Confirm Password"
                 required
                 outlined
+                color="primary"
                 flat
                 @input="$v.confirmPassword.$touch()"
                 @blur="$v.confirmPassword.$touch()"
@@ -97,9 +110,11 @@
         </v-card-text>
       </v-form>
     </v-card>
-  </v-container>
+    </div>
+  </div>
 </template>
 <script>
+import { gsap } from 'gsap';
 import { validationMixin } from 'vuelidate';
 import {
   required, minLength, maxLength, email, sameAs,
@@ -126,6 +141,7 @@ export default {
     email: '',
     password: '',
     confirmPassword: '',
+    tween: null,
   }),
 
   computed: {
@@ -181,6 +197,22 @@ export default {
     },
   },
 
+  mounted() {
+    this.tween = gsap.timeline();
+    this.tween.from(this.$refs.containerWrap, {
+      delay: 0.5,
+    })
+      .from(this.$refs.cardWrapper, {
+        opacity: 0,
+        x: -80,
+        duration: 1,
+      }, '-=1.2');
+  },
+
+  beforeDestroy() {
+    this.tween.kill();
+  },
+
   methods: {
     signup() {
       this.$store.dispatch('signup', {
@@ -210,5 +242,44 @@ export default {
 .login-card {
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   width: 375px;
+}
+
+.img-res {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+.img-res img {
+  width: 100%;
+  height: 100%;
+}
+
+.home--icon {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  z-index: 2;
+}
+
+.container--wrapper {
+  /* background-image: url("../assets/images/layered-waves.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-origin: border-box; */
+  background-color: #EDE9F2;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+@media screen and (max-width: 575px){
+
+  .login-card {
+     width: calc(100% - 50px);
+     margin: 0 auto;
+  }
 }
 </style>

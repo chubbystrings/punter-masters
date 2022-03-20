@@ -1,7 +1,7 @@
 <template>
-  <div >
+
     <rollover />
-  </div>
+
 </template>
 
 <script>
