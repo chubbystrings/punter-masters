@@ -4,8 +4,8 @@
     <base-back  v-if="userProfile" />
     <base-reset />
       <v-card
-        style="width: 95vw;"
-        class="mx-auto"
+        style=""
+        class="mx-auto pa-3"
         color="transparent"
         outlined
         flat
