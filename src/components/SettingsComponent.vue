@@ -1,102 +1,86 @@
 <template>
   <div class="">
-    <base-back  v-if="userProfile" />
+    <base-back v-if="userProfile" />
     <base-reset />
-      <v-card
-    style="width: 95vw;"
-    class="mx-auto"
-    color="transparent"
-    outlined
-    flat
-    >
-        <v-card-title class="primary--text text-center">User Settings</v-card-title>
+    <v-card class="mx-auto pa-3" color="transparent" outlined flat>
+      <h3 class="primary--text">User Settings</h3>
       <v-container fluid>
-          <v-row>
-              <v-col cols="12">
-                  <v-row>
-                    <v-col cols='12' class="">
-                      <v-card
-                        style="width: 95vw;"
-                        class=""
-                        color="transparent"
-                        flat
-                        >
-                        <small>
-                          current Username : <span class= "primary--text">{{ userProfile.displayName
-                           ? '@' + userProfile.displayName : 'None' }}
-                           </span>
-                        </small><br>
-                        <small
-                         :class="isTaken
-                          || loading || username.length < 4 ? 'redColor' : 'greenColor'"
-                         >
-                         {{ checking }}
-                        </small>
-                        <v-text-field
-                        @input="checkUsername"
-                        v-model="username"
-                            dense
-                            filled
-                            label="username"
-                            prepend-icon="@"
-                        ></v-text-field>
-                        <v-btn
-                         small
-                         color="primary"
-                          :disabled="username.length < 4
-                           || !username || displayName ||
-                            isTaken || loading === 'loading'"
-                          @click.prevent="changeUsername"
-                          >
-                          {{ userProfile.displayName ? 'Change' : 'Add' }}
-                        </v-btn>
-                      </v-card>
-                    </v-col>
-                     <v-col cols='12'>
-                       <v-card-subtitle class="primary--text">Change Password</v-card-subtitle>
-                      <v-card>
-                        <v-btn
-                        @click="resetOpen"
-                        color="primary"
-                        block
-                        small
-                        >Reset Password
-                        </v-btn>
-                    </v-card>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-card
-                        class=""
-                        max-width="500"
-                        flat
-                      >
-                       <v-card-subtitle class="primary--text">Select Avatar</v-card-subtitle>
-                        <v-container fluid>
-                          <v-row dense>
-                            <v-col>
-                              <v-card
-                              flat
-                              style="width: 80vw"
-                              :loading="avatarLoad"
-                              >
-                                <v-avatar class="mb-2" v-for="(avatar, i) in avatars" :key="i">
-                                  <v-img
-                                  @load="onload"
-                                  class="hoverImg"
-                                  @click="confirm(avatar)"
-                                  :src="avatar"
-                                  >
-                                  </v-img>
-                                </v-avatar>
-                              </v-card>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card>
-                    </v-col>
-                  </v-row>
+        <v-row>
+          <v-col cols="12">
+            <v-row>
+              <v-col cols="12" class="">
+                <v-card style="width: 95vw;" class="" color="transparent" flat>
+                  <small>
+                    current Username :
+                    <span class="primary--text"
+                      >{{ userProfile.displayName ? "@" + userProfile.displayName : "None" }}
+                    </span> </small
+                  ><br />
+                  <small
+                    :class="isTaken || loading || username.length < 4 ? 'redColor' : 'greenColor'"
+                  >
+                    {{ checking }}
+                  </small>
+                  <v-text-field
+                    @input="checkUsername"
+                    v-model="username"
+                    dense
+                    filled
+                    label="username"
+                    prepend-icon="@"
+                  ></v-text-field>
+                  <v-btn
+                    small
+                    depressed
+                    class="accent--text"
+                    color="primary"
+                    :disabled="
+                      username.length < 4 ||
+                        !username ||
+                        displayName ||
+                        isTaken ||
+                        loading === 'loading'
+                    "
+                    @click.prevent="changeUsername"
+                  >
+                    {{ userProfile.displayName ? "Change" : "Add" }}
+                  </v-btn>
+                </v-card>
               </v-col>
-          </v-row>
+              <v-col cols="12">
+                <p>Change Password</p>
+                  <v-btn @click="resetOpen"
+                  depressed color="primary" class="accent--text" small>
+                  Reset Password
+                  </v-btn>
+              </v-col>
+              <v-col cols="12">
+                <v-card class="" color="transparent" flat>
+                  <p class="primary--text">Select Avatar</p>
+                  <v-container fluid>
+                    <v-row dense>
+                      <v-col>
+                        <v-card flat :loading="avatarLoad" color="transparent">
+                          <v-avatar class="mb-2 mr-3"
+                          size="24"
+                          v-for="(avatar, i) in avatars" :key="i">
+                            <v-img
+                              @load="onload"
+                              class="hoverImg"
+                              @click="confirm(avatar)"
+                              :src="avatar"
+                            >
+                            </v-img>
+                          </v-avatar>
+                        </v-card>
+                      </v-col>
+                    </v-row>
+                  </v-container>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
       </v-container>
     </v-card>
     <base-dialog @delete="select" />
@@ -107,7 +91,6 @@ import { mapState } from 'vuex';
 import { usersCollection } from '../firebase';
 
 export default {
-
   data: () => ({
     loading: '',
     avatarLoad: true,
