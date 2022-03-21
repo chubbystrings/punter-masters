@@ -72,6 +72,8 @@ export default {
 </script>
 <style scoped>
 .activeBtnClass {
-  background-color: #E8F5E9;
+  transition: all .1s linear;
+  background: #e6e3e3;
+  color: #260D40 !important;
 }
 </style>

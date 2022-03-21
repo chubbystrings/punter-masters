@@ -1,22 +1,17 @@
 <template>
-  <div>
-    <v-divider key="divider"></v-divider>
-    <user-comment
-      v-for="(comment, i) in paginatedComments"
-      :key="comment.comment"
-    >
+  <div class="comments-wrapper">
+    <!-- <v-divider key="divider"></v-divider> -->
+    <!-- <user-comment v-for="(comment, i) in paginatedComments" :key="comment.comment">
       <template v-slot:img>
         <div id="img---slot">
-          <v-avatar size="54"
-          :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
-          >
+          <v-avatar size="54" :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`">
           </v-avatar>
         </div>
       </template>
       <template v-slot:default>
-         <small class="primary--text mt-1">
-            {{ comment.name }}commented {{ comment.createdOn | formatDate}}
-          </small>
+        <small class="primary--text mt-1">
+          {{ comment.name }}commented {{ comment.createdOn | formatDate }}
+        </small>
         <section>
           <p>{{ comment.content }}</p>
         </section>
@@ -25,19 +20,21 @@
             id="likesBtn"
             icon
             right
-            @click.prevent="commentLike(i, comment.id, comment.postId,
-            comment.likes, comment.name)"
+            @click.prevent="commentLike(i, comment.id, comment.postId, comment.likes, comment.name)"
           >
             <v-badge
-            color="accent"
-            :content="comment.likes ? comment.likes : '0'"
-            inline
-            class="mr-2"
+              color="accent"
+              :content="comment.likes ? comment.likes : '0'"
+              inline
+              class="mr-2"
             >
               <v-icon
-              :color="userLikedComments.filter((i) =>
-                i.commentId === comment.id && i.userId === ID).length > 0 ?
-                'primary' : ''"
+                :color="
+                  userLikedComments.filter(i => i.commentId === comment.id && i.userId === ID)
+                    .length > 0
+                    ? 'primary'
+                    : ''
+                "
               >
                 mdi-heart
               </v-icon>
@@ -45,79 +42,17 @@
           </v-btn>
         </nav>
       </template>
-    </user-comment>
-    <!-- <v-timeline key="timeline" dense v-if="paginatedComments.length > 0"
-      class="pt-1"
-    >
-      <v-timeline-item
-        v-for="(comment, i) in paginatedComments"
-        :key="comment.comment"
-        :color="`#${Math.floor(Math.random() * 16777215).toString(16)}`"
-        class="pa-0 mt-2 mb-2"
-        small
-        fill-dot
-      >
-
-      <transition-group
-    mode="out-in"
-    enter-active-class="animated fadeIn"
-    leave-active-class="animated fadeOut"
-    >
-
-        <v-card class="mx-n5"
-        rounded
-        max-height="220"
-         flat
-         :key="i"
-         color="secondary"
-         shaped
-         >
-          <v-card-title class="pa-0 pl-2">
-            {{comment.name | lowerCase }}
-            <small class="caption pl-1 text-color" >
-              commented {{ comment.createdOn | formatDate}}
-            </small>
-            </v-card-title>
-          <v-card-text class="pa-0 pl-2">
-            {{comment.content}}
-          </v-card-text>
-          <v-card-actions class="pa-0 pr-2">
-            <v-spacer></v-spacer>
-             <v-btn
-              icon
-              right
-              class="pa-0"
-               @click.prevent="commentLike(i, comment.id, comment.postId,
-                comment.likes, comment.name)"
-              >
-                <v-badge
-                color="accent"
-                :content="comment.likes ? comment.likes : '0'"
-                inline
-                class="mr-2"
-                >
-                <v-icon
-                :color="userLikedComments.filter((i) =>
-                 i.commentId === comment.id && i.userId === ID).length > 0 ?
-                 'primary' : ''"
-                >
-                  mdi-heart
-                </v-icon>
-              </v-badge>
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-          </transition-group>
-      </v-timeline-item>
-    </v-timeline> -->
-    <v-divider key="divider2"></v-divider>
-    <v-pagination
-    v-if="paginatedComments.length > 0"
-    key="pagination"
+    </user-comment> -->
+    <new-comment v-for="(comment, i) in commentsData" :key="comment.comment"
+     :index="i" :commentData="comment">
+    </new-comment>
+    <!-- <v-pagination
+      v-if="paginatedComments.length > 0"
+      key="pagination"
       v-model="page"
       :length="pages"
       circle
-    ></v-pagination>
+    ></v-pagination> -->
   </div>
 </template>
 <script>
@@ -125,10 +60,12 @@
 import moment from 'moment';
 import { mapState } from 'vuex';
 import { commentLikesCollection, auth, commentsCollection } from '../../firebase';
+import NewComment from './NewComment.vue';
 
 export default {
   components: {
-    UserComment: () => import('./Comment.vue'),
+    // UserComment: () => import('./Comment.vue'),
+    NewComment,
   },
   data: () => ({
     reverse: true,
@@ -151,9 +88,7 @@ export default {
     },
 
     pages() {
-      return (
-        this.commentsData.length > 3
-          ? Math.ceil(this.commentsData.length / 5) : 1);
+      return this.commentsData.length > 3 ? Math.ceil(this.commentsData.length / 5) : 1;
     },
 
     paginatedComments() {
@@ -166,14 +101,18 @@ export default {
 
   filters: {
     formatDate(val) {
-      if (!val) { return '-'; }
+      if (!val) {
+        return '-';
+      }
       if (val.seconds) {
         return moment(Date.parse(val.toDate())).fromNow();
       }
       return moment(Date.parse(val)).fromNow();
     },
     trimLength(val) {
-      if (val.length < 200) { return val; }
+      if (val.length < 200) {
+        return val;
+      }
       return `${val.substring(0, 200)}...`;
     },
 
@@ -186,7 +125,9 @@ export default {
     // eslint-disable-next-line no-unused-vars
     async commentLike(index, commentId, postId, likes, name) {
       // eslint-disable-next-line max-len
-      const likedComment = this.userLikedComments.filter((i) => i.userId === this.ID && i.commentId === commentId);
+      const likedComment = this.userLikedComments.filter(
+        (i) => i.userId === this.ID && i.commentId === commentId,
+      );
       if (likedComment.length === 0) {
         this.paginatedComments[index].likes += 1;
         try {
@@ -195,7 +136,9 @@ export default {
 
           // check if user has liked comment
           const doc = await commentLikesCollection.doc(docId).get();
-          if (doc.exists) { return; }
+          if (doc.exists) {
+            return;
+          }
           // create comment likes
           await commentLikesCollection.doc(docId).set({
             postId,
@@ -274,13 +217,18 @@ export default {
 </script>
 <style scoped>
 @import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css";
-.v-pagination__item, .v-pagination__navigation {
+.v-pagination__item,
+.v-pagination__navigation {
   outline: none !important;
 }
 
 nav {
   display: flex;
   justify-content: flex-end;
-  margin-right: 1rem
+  margin-right: 1rem;
+}
+.comments-wrapper {
+  box-sizing: border-box;
+  padding: 10px;
 }
 </style>

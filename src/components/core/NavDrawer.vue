@@ -8,7 +8,10 @@
       @input="trans"
     >
       <v-list dense>
-          <v-list-item two-line>
+          <v-list-item two-line
+          :class="currentRouteName === 'Profile' ||
+           currentRouteName === 'Signup' ? 'activeBtnClass' : ''"
+          >
             <v-list-item-avatar v-if="auth">
               <img  :src="userProfile.photoURL">
             </v-list-item-avatar>
@@ -17,7 +20,8 @@
               <v-list-item-title class="text-color">
                 <v-btn
                 class="pa-0 text-lowercase"
-                color="accent"
+                :color="currentRouteName === 'Profile' ||
+           currentRouteName === 'Signup' ? 'primary' : 'accent'"
                @click="doAction('route', 'Profile')" text
                 >
                 {{userProfile.displayName ? '@' + userProfile.displayName : userProfile.lastname}}
@@ -36,13 +40,16 @@
           </v-list-item>
           <v-divider></v-divider>
           <v-list-item
+           :class="currentRouteName === 'Dashboard' ? 'activeBtnClass' : ''"
         @click="doAction('route', 'Dashboard')"
         >
           <v-list-item-action>
             <v-icon color="primary">mdi-home</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title class="text-color" >
+            <v-list-item-title class="text-color"
+             :color="currentRouteName === 'Dashboard' ? 'primary' : 'accent'"
+            >
                  HOME
             </v-list-item-title>
           </v-list-item-content>
@@ -61,6 +68,7 @@
         </v-list-item>
 
         <v-list-item link v-if="auth"
+        :class="currentRouteName === 'CodeRoom' ? 'activeBtnClass' : ''"
         @click="doAction('route', 'CodeRoom')"
         >
           <v-list-item-action>
@@ -74,6 +82,7 @@
         </v-list-item>
 
         <v-list-item link v-if="auth"
+         :class="currentRouteName === 'Banter' ? 'activeBtnClass' : ''"
         @click="doAction('route', 'Banter')"
         >
           <v-list-item-action>
@@ -87,6 +96,7 @@
         </v-list-item>
 
          <v-list-item link v-if="auth"
+          :class="currentRouteName === 'Rollover' ? 'activeBtnClass' : ''"
         @click="doAction('route', 'Rollover')"
         >
           <v-list-item-action>
@@ -100,6 +110,7 @@
         </v-list-item>
 
         <v-list-item
+         :class="currentRouteName === 'Settings' ? 'activeBtnClass' : ''"
         @click="doAction('route', 'Settings')"
          link v-if="auth"
         >
@@ -140,6 +151,10 @@ export default {
     ...mapState(['drawer', 'userProfile']),
     auth() {
       return Object.keys(this.userProfile).length > 1;
+    },
+
+    currentRouteName() {
+      return this.$route.name;
     },
 
     currentRoute() {
@@ -186,5 +201,11 @@ export default {
 <style scoped>
 #keep .v-navigation-drawer__border {
   display: none
+}
+
+.activeBtnClass {
+  transition: all .1s linear;
+  background: #e6e3e3;
+  color: #260D40 !important;
 }
 </style>
