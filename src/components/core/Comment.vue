@@ -24,9 +24,10 @@ export default {
 </script>
 <style scoped>
 #comment {
-  background-color:  #FCE4EC;
-  border-radius: 40px;
+  background-color:  #fafafa;
   padding-right: 0.3rem;
+  max-width: 350px;
+  max-height: 250px;
 }
 
 #img---section {

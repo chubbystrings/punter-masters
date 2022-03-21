@@ -2,6 +2,7 @@
   <v-hover v-slot="{ hover }">
     <v-card :elevation="hover ? 4 : 0"
     @click="openPost(item.id, item.forum)"
+    color="#fafafa"
      class="mx-auto post-card" width="250" height="270">
       <v-list-item three-line>
         <v-list-item-content>
