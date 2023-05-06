@@ -137,6 +137,7 @@ export default {
   z-index: 100000;
   margin-top: 30px;
   background: #fafafa;
+  min-height: 620px;
 }
 
 /* .section-one .section-wrapper::after {
