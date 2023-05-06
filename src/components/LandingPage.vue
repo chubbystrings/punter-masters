@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Preloader @done="preloader = false" />
-    <Main :preloader="preloader" />
+    <!-- <Preloader @done="preloader = false" /> -->
+    <Main :preloader="false" />
   </div>
 </template>
 
 <script>
-import Preloader from './LandingPage/PreLoader.vue';
+// import Preloader from './LandingPage/PreLoader.vue';
 import Main from './LandingPage/Main.vue';
 // @ is an alias to /src
 
@@ -23,7 +23,7 @@ export default {
   },
 
   components: {
-    Preloader,
+    // Preloader,
     Main,
   },
 };

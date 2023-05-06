@@ -51,15 +51,16 @@ export default {
         paused: true,
       },
     );
+    this.tween.play();
   },
 
-  watch: {
-    preloader(val) {
-      if (!val) {
-        this.tween.play();
-      }
-    },
-  },
+  // watch: {
+  //   preloader(val) {
+  //     if (!val) {
+  //       this.tween.play();
+  //     }
+  //   },
+  // },
 };
 
 </script>
